@@ -13,7 +13,7 @@ export default function Hero() {
   }, []);
 
   // Floating animation variants
-  const floatingVariants = {
+  const floatingVariants: any = {
     animate: {
       y: [0, -15, 0],
       transition: {

@@ -1,4 +1,4 @@
-import PromoBar from "./(home)/components/PromoBar";
+
 import Header from "./(home)/components/Header";
 import Hero from "./(home)/components/Hero";
 import Features from "./(home)/components/Features";
