@@ -10,7 +10,6 @@ import Footer from "./(home)/components/Footer";
 export default function Home() {
   return (
     <main>
-      <PromoBar />
       <Header />
       <Hero />
       <Features />
