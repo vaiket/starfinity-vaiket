@@ -6,6 +6,8 @@ import Pricing from "./(home)/components/Pricing";
 import Testimonials from "./(home)/components/Testimonials";
 import FAQ from "./(home)/components/FAQ";
 import Footer from "./(home)/components/Footer";
+import SecureFundingProcess from "./(home)/components/SecureFundingProcess";
+import ContactCTA from "./(home)/components/ContactCTA";
 
 export default function Home() {
   return (
@@ -16,6 +18,8 @@ export default function Home() {
       <Pricing />
       <Testimonials />
       <FAQ />
+      <SecureFundingProcess />
+      <ContactCTA />
       <Footer />
     </main>
   );
