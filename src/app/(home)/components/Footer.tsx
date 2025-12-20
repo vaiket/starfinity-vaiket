@@ -64,7 +64,7 @@ export default function Footer() {
                 <span className="text-white font-bold text-lg">SF</span>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900">Startfinity</h3>
+                <h3 className="text-xl font-bold text-gray-900">Essygrow</h3>
                 <p className="text-sm text-gray-600">Financial Solutions</p>
               </div>
             </div>
@@ -163,8 +163,8 @@ export default function Footer() {
                   </div>
                   <div>
                     <div className="text-sm font-medium text-gray-900">Email</div>
-                    <a href="mailto:info@startfinitynavigator.com" className="text-gray-600 text-sm hover:text-[#414288]">
-                      info@startfinitynavigator.com
+                    <a href="mailto:info@essygrow.com" className="text-gray-600 text-sm hover:text-[#414288]">
+                      info@essygrow.com
                     </a>
                   </div>
                 </div>
@@ -264,7 +264,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-center md:text-left">
               <p className="text-sm text-gray-600">
-                © {currentYear} STARTFINITY Financial Services Pvt. Ltd. All rights reserved.
+                © {currentYear} Essygrow Financial Services Pvt. Ltd. All rights reserved.
               </p>
               <p className="text-xs text-gray-500 mt-1">
                 Registered with RBI | CIN: U67190GJ2018PTC103456

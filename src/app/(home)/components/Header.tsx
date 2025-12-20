@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight, ExternalLink } from "lucide-react";
+import { Menu, X, ChevronRight, Phone, User, Building2, Target } from "lucide-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,19 +12,11 @@ export default function Header() {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  // Handle scroll effect with throttling
+  // Handle scroll effect
   useEffect(() => {
-    let ticking = false;
-    
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollTop = window.scrollY;
-          setScrolled(scrollTop > 10);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      const scrollTop = window.scrollY;
+      setScrolled(scrollTop > 10);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -52,20 +43,11 @@ export default function Header() {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
-      document.body.style.position = "fixed";
-      document.body.style.width = "100%";
     } else {
       document.body.style.overflow = "auto";
-      document.body.style.touchAction = "auto";
-      document.body.style.position = "static";
-      document.body.style.width = "auto";
     }
     return () => {
       document.body.style.overflow = "auto";
-      document.body.style.touchAction = "auto";
-      document.body.style.position = "static";
-      document.body.style.width = "auto";
     };
   }, [isOpen]);
 
@@ -98,64 +80,32 @@ export default function Header() {
   }, [pathname]);
 
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/services", label: "Services", symbol: "®", tag: "Premium" },
-    { href: "/success-stories", label: "Success Stories", symbol: "©", tag: "New" },
-    { href: "/about", label: "About Us", symbol: "加", tag: "Trusted" },
+    { href: "/", label: "Home", icon: "🏠" },
+    { href: "/services", label: "Services", tag: "Premium" },
+    { href: "/success-stories", label: "Success Stories", tag: "New" },
+    { href: "/about", label: "About Us", tag: "Trusted" },
     { href: "/contact", label: "Contact Us", tag: "24/7" },
   ];
 
-  const ctaVariants = {
-    hover: {
-      scale: 1.02,
-      boxShadow: "0 10px 30px -10px rgba(37, 99, 235, 0.5)",
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut"
-      }
-    },
-    tap: {
-      scale: 0.98
-    }
-  };
-
-  const mobileMenuVariants = {
-    closed: {
-      opacity: 0,
-      y: -20,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut"
-      }
-    },
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-        when: "beforeChildren",
-        staggerChildren: 0.05
-      }
-    }
-  };
-
-  const menuItemVariants = {
-    closed: { opacity: 0, x: -20 },
-    open: { opacity: 1, x: 0 }
-  };
-
-  const handleMenuToggle = useCallback(() => {
+  const handleMenuToggle = () => {
     setIsOpen(prev => !prev);
-  }, []);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    setIsOpen(false);
+  };
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg shadow-gray-200/50"
-            : "bg-white/90 backdrop-blur-sm"
+            ? "bg-white shadow-md"
+            : "bg-white"
         }`}
         role="banner"
         aria-label="Main navigation"
@@ -166,20 +116,18 @@ export default function Header() {
             <Link
               href="/"
               className="flex items-center gap-2 group"
-              aria-label="EasyGrow - Go to homepage"
+              aria-label="Startfinity - Go to homepage"
+              onClick={scrollToTop}
             >
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative"
-              >
-                <span className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                  EasyGrow
+              <div className="relative">
+                <span className="text-2xl lg:text-3xl font-bold" style={{ color: '#414288' }}>
+                  Startfinity
                 </span>
-                <span className="absolute -top-1 -right-2 text-xs font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full">
+                <span className="absolute -top-1 -right-2 text-xs font-semibold px-1.5 py-0.5 rounded-full" 
+                  style={{ backgroundColor: '#B0DB43', color: '#1a1a1a' }}>
                   Pro
                 </span>
-              </motion.div>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}
@@ -203,188 +151,205 @@ export default function Header() {
                     <div className="flex items-center gap-1.5">
                       <span className={`font-medium transition-colors duration-200 ${
                         pathname === item.href || activeItem === item.label
-                          ? "text-blue-600"
-                          : "text-gray-700 hover:text-blue-600"
+                          ? "text-[#414288]"
+                          : "text-gray-700 hover:text-[#414288]"
                       }`}>
                         {item.label}
                       </span>
-                      {item.symbol && (
-                        <span className="text-xs font-bold text-blue-500 transition-transform group-hover:scale-110">
-                          {item.symbol}
-                        </span>
-                      )}
                       {item.tag && (
-                        <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full">
+                        <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                          style={{ 
+                            backgroundColor: item.tag === "New" ? '#B0DB43' : '#414288',
+                            color: item.tag === "New" ? '#1a1a1a' : 'white'
+                          }}>
                           {item.tag}
                         </span>
                       )}
                     </div>
-                    <motion.span
-                      className={`absolute -bottom-1 left-1/2 h-0.5 rounded-full ${
+                    <div 
+                      className={`absolute -bottom-1 left-0 right-0 h-0.5 rounded-full transition-all duration-300 ${
                         pathname === item.href || activeItem === item.label
-                          ? "w-8 bg-blue-600"
-                          : "w-0 bg-blue-600 group-hover:w-8"
+                          ? "w-full"
+                          : "w-0 group-hover:w-full"
                       }`}
-                      initial={{ x: "-50%" }}
-                      animate={{ 
-                        x: "-50%",
-                        width: pathname === item.href || activeItem === item.label ? "2rem" : "0rem"
-                      }}
-                      transition={{ duration: 0.2 }}
+                      style={{ backgroundColor: '#414288' }}
                     />
                   </div>
                 </Link>
               ))}
             </nav>
 
-            {/* Desktop CTA Button */}
-            <div className="hidden lg:block">
-              <motion.div
-                variants={ctaVariants}
-                whileHover="hover"
-                whileTap="tap"
+            {/* Desktop CTA & Contact */}
+            <div className="hidden lg:flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#B0DB43' }}>
+                  <Phone className="w-4 h-4 text-gray-900" />
+                </div>
+                <div>
+                  <div className="text-xs text-gray-600">Call us 24/7</div>
+                  <a href="tel:+919157142657" className="text-sm font-semibold hover:text-[#414288] transition-colors">
+                    +91 9157142657
+                  </a>
+                </div>
+              </div>
+              
+              <div className="h-6 w-px bg-gray-300"></div>
+              
+              <Link
+                href="/apply"
+                className="flex items-center gap-2 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 group shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+                style={{ backgroundColor: '#414288' }}
+                aria-label="Start your funding journey"
               >
-                <Link
-                  href="/apply"
-                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all duration-300 group relative overflow-hidden"
-                  aria-label="Start your funding journey"
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative flex items-center gap-2">
-                    <span className="text-lg animate-pulse">✨</span>
-                    <span>Start Funding Journey</span>
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </Link>
-              </motion.div>
+                <Target className="w-4 h-4" />
+                <span>Apply Now</span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
-            <motion.button
+            <button
               onClick={handleMenuToggle}
-              whileTap={{ scale: 0.95 }}
-              className="lg:hidden p-2.5 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 text-gray-700 hover:from-gray-100 hover:to-gray-200 transition-all duration-200 shadow-sm hover:shadow-md"
+              className="lg:hidden p-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors hover:scale-105 active:scale-95"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
-              <motion.div
-                animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                {isOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </motion.div>
-            </motion.button>
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
-        <AnimatePresence mode="wait">
-          {isOpen && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="lg:hidden fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
-                onClick={() => setIsOpen(false)}
-                aria-hidden="true"
-              />
-              
-              {/* Menu Panel */}
-              <motion.div
-                ref={mobileMenuRef}
-                id="mobile-menu"
-                variants={mobileMenuVariants}
-                initial="closed"
-                animate="open"
-                exit="closed"
-                className="lg:hidden fixed top-16 left-4 right-4 z-50 bg-white rounded-2xl shadow-2xl shadow-black/20 border border-gray-100 overflow-hidden"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Mobile navigation menu"
-              >
-                <div className="px-2 pt-6 pb-4 space-y-1 max-h-[70vh] overflow-y-auto">
-                  {navItems.map((item) => (
-                    <motion.div
-                      key={item.label}
-                      variants={menuItemVariants}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`flex items-center justify-between py-3 px-4 rounded-xl transition-all duration-200 ${
-                          pathname === item.href
-                            ? "bg-blue-50 text-blue-600"
-                            : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                        }`}
-                        aria-current={pathname === item.href ? "page" : undefined}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="font-medium">{item.label}</span>
-                          {item.tag && (
-                            <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                              {item.tag}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {item.symbol && (
-                            <span className="text-xs font-bold text-blue-500">
-                              {item.symbol}
-                            </span>
-                          )}
-                          <ChevronRight className="w-4 h-4 text-gray-400" />
-                        </div>
-                      </Link>
-                    </motion.div>
-                  ))}
-                  
-                  {/* Mobile CTA Button */}
-                  <motion.div
-                    variants={menuItemVariants}
-                    transition={{ duration: 0.2, delay: 0.1 }}
-                    className="pt-2 px-2"
-                  >
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Link
-                        href="/apply"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center justify-center gap-2 w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center font-semibold rounded-xl hover:shadow-lg transition-all duration-300 shadow-md"
-                      >
-                        <span className="flex items-center gap-2">
-                          <span className="text-lg">✨</span>
-                          <span>Start Funding Journey</span>
-                        </span>
-                        <ExternalLink className="w-4 h-4" />
-                      </Link>
-                    </motion.div>
-                    
-                    {/* Additional Mobile Info */}
-                    <div className="mt-4 text-center">
-                      <p className="text-xs text-gray-500">
-                        Need help? Call us at{" "}
-                        <a href="tel:+18005551234" className="text-blue-600 font-semibold">
-                          1-800-555-1234
-                        </a>
-                      </p>
+        {isOpen && (
+          <div
+            ref={mobileMenuRef}
+            className="lg:hidden fixed inset-0 top-16 bg-white z-40"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
+          >
+            <div className="h-full overflow-y-auto pb-20">
+              {/* Mobile Contact Info */}
+              <div className="p-6 bg-gradient-to-r from-[#414288]/5 to-[#B0DB43]/5">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#414288' }}>
+                      <Phone className="w-5 h-5 text-white" />
                     </div>
-                  </motion.div>
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">24/7 Support</div>
+                      <a href="tel:+919157142657" className="text-lg font-bold hover:text-[#414288] transition-colors">
+                        +91 9157142657
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
+              </div>
+
+              {/* Mobile Navigation Links */}
+              <div className="p-4 space-y-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center justify-between py-4 px-4 rounded-lg transition-all duration-200 ${
+                      pathname === item.href
+                        ? "bg-[#414288]/10"
+                        : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                    aria-current={pathname === item.href ? "page" : undefined}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="font-medium">{item.label}</span>
+                      {item.tag && (
+                        <span className="text-xs font-semibold px-2 py-1 rounded-full"
+                          style={{ 
+                            backgroundColor: item.tag === "New" ? '#B0DB43' : '#414288',
+                            color: item.tag === "New" ? '#1a1a1a' : 'white'
+                          }}>
+                          {item.tag}
+                        </span>
+                      )}
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-400" />
+                  </Link>
+                ))}
+              </div>
+
+              {/* Mobile CTA Section */}
+              <div className="p-6 mt-8">
+                <div className="space-y-4">
+                  <Link
+                    href="/apply"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full py-3.5 px-4 text-white text-center font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+                    style={{ backgroundColor: '#414288' }}
+                  >
+                    <User className="w-5 h-5" />
+                    <span>Start Free Application</span>
+                  </Link>
+                  
+                  <Link
+                    href="/services"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full py-3.5 px-4 border border-gray-300 text-gray-700 text-center font-semibold rounded-lg hover:bg-gray-50 transition-all duration-300"
+                  >
+                    <Building2 className="w-5 h-5" />
+                    <span>Explore Services</span>
+                  </Link>
+                </div>
+                
+                {/* Additional Mobile Info */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <div className="space-y-4">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 mb-2">Business Hours</div>
+                      <div className="text-sm text-gray-600">
+                        <div>Mon-Fri: 9:00 AM - 7:00 PM</div>
+                        <div>Sat: 10:00 AM - 5:00 PM</div>
+                        <div>Sun: Closed</div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 mb-2">Email</div>
+                      <a href="mailto:info@startfinitynavigator.com" className="text-sm text-gray-600 hover:text-[#414288]">
+                        info@startfinitynavigator.com
+                      </a>
+                    </div>
+                    
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 mb-2">Address</div>
+                      <div className="text-sm text-gray-600">
+                        315 Sahitya Arcade, Ahmedabad
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Trust Indicators */}
+                  <div className="mt-8 flex items-center justify-center gap-4">
+                    <div className="text-center">
+                      <div className="text-lg font-bold" style={{ color: '#414288' }}>5,000+</div>
+                      <div className="text-xs text-gray-600">Businesses</div>
+                    </div>
+                    <div className="h-8 w-px bg-gray-300"></div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold" style={{ color: '#B0DB43' }}>95%</div>
+                      <div className="text-xs text-gray-600">Success Rate</div>
+                    </div>
+                    <div className="h-8 w-px bg-gray-300"></div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold" style={{ color: '#414288' }}>28+</div>
+                      <div className="text-xs text-gray-600">States</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Spacer to prevent content from hiding under fixed header */}

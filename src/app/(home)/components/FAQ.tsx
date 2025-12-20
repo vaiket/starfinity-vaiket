@@ -14,7 +14,6 @@ import {
   Shield,
   HelpCircle,
   Star,
-  Zap,
   CheckCircle,
   TrendingUp,
   Building2,
@@ -179,8 +178,7 @@ export default function FAQSection() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for answers (e.g., 'eligibility', 'documents', 'interest rates')"
-              className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
-              style={{ focusRingColor: '#414288' }}
+              className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
             />
             {searchQuery && (
               <button
@@ -437,8 +435,7 @@ export default function FAQSection() {
                         value={contactData.name}
                         onChange={(e) => setContactData(prev => ({ ...prev, name: e.target.value }))}
                         required
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900"
-                        style={{ focusRingColor: '#414288' }}
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900"
                         placeholder="Enter your full name"
                       />
                     </div>
@@ -453,7 +450,7 @@ export default function FAQSection() {
                           value={contactData.email}
                           onChange={(e) => setContactData(prev => ({ ...prev, email: e.target.value }))}
                           required
-                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900"
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900"
                           placeholder="you@example.com"
                         />
                       </div>
@@ -467,7 +464,7 @@ export default function FAQSection() {
                           value={contactData.phone}
                           onChange={(e) => setContactData(prev => ({ ...prev, phone: e.target.value }))}
                           required
-                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900"
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900"
                           placeholder="+91 98765 43210"
                         />
                       </div>
@@ -482,7 +479,7 @@ export default function FAQSection() {
                         onChange={(e) => setContactData(prev => ({ ...prev, message: e.target.value }))}
                         required
                         rows={4}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900 resize-none"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900 resize-none"
                         placeholder="Please describe your question in detail..."
                       />
                     </div>

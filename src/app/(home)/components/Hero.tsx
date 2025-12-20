@@ -80,7 +80,7 @@ export default function Hero() {
   const stats = [
     { value: "₹150Cr+", label: "Funds Disbursed", icon: <DollarSign className="w-4 h-4" /> },
     { value: "5,000+", label: "Businesses Funded", icon: <Building2 className="w-4 h-4" /> },
-    { value: "99%", label: "Success Rate", icon: <Award className="w-4 h-4" /> },
+    { value: "92%", label: "Success Rate", icon: <Award className="w-4 h-4" /> },
     { value: "24-48hrs", label: "Fast Processing", icon: <Clock className="w-4 h-4" /> },
   ];
 
@@ -205,8 +205,7 @@ export default function Hero() {
                       name="annualTurnover"
                       value={formData.annualTurnover}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900"
-                      style={{ focusRingColor: '#414288' }}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900"
                     >
                       <option value="">Select Range</option>
                       <option value="0-10">Below ₹10L</option>
@@ -221,7 +220,7 @@ export default function Hero() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Business Age
                     </label>
-                    <select className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900">
+                    <select className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900">
                       <option value="">Select Range</option>
                       <option value="0-1">0-1 Year</option>
                       <option value="1-3">1-3 Years</option>
@@ -297,8 +296,14 @@ export default function Hero() {
 
           {/* Right - Application Form */}
           <motion.div
-            variants={floatingVariants}
-            animate="animate"
+            animate={{
+              y: [0, -10, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
             className="lg:col-span-5"
             id="full-form"
           >
@@ -329,9 +334,8 @@ export default function Hero() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
                     placeholder="Enter your full name"
-                    style={{ focusRingColor: '#414288' }}
                   />
                 </div>
 
@@ -346,7 +350,7 @@ export default function Hero() {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
                       placeholder="you@example.com"
                     />
                   </div>
@@ -361,7 +365,7 @@ export default function Hero() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
                       placeholder="+91 98765 43210"
                     />
                   </div>
@@ -377,7 +381,7 @@ export default function Hero() {
                       value={formData.businessType}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900 appearance-none"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900 appearance-none"
                     >
                       <option value="">Select Business Type</option>
                       {businessTypes.map(type => (
@@ -402,7 +406,7 @@ export default function Hero() {
                       required
                       min="500000"
                       max="100000000"
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:outline-none transition-colors text-gray-900"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#414288] focus:outline-none transition-colors text-gray-900"
                       placeholder="500000"
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
@@ -501,7 +505,7 @@ export default function Hero() {
             {[
               {
                 title: "Higher Success Rate",
-                description: "99% approval rate with our expert documentation",
+                description: "92% approval rate with our expert documentation",
                 icon: <BarChart3 className="w-6 h-6" />,
                 color: "bg-[#414288]"
               },
@@ -542,7 +546,7 @@ export default function Hero() {
       {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         className="hidden md:block absolute bottom-6 left-1/2 transform -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-2">
