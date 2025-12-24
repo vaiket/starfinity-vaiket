@@ -84,7 +84,6 @@ export default function Header() {
     { href: "/services", label: "Services", tag: "Premium" },
     { href: "/success-stories", label: "Success Stories", tag: "New" },
     { href: "/about", label: "About Us", tag: "Trusted" },
-    { href: "/contact", label: "Contact Us", tag: "24/7" },
   ];
 
   const handleMenuToggle = () => {
@@ -121,7 +120,7 @@ export default function Header() {
             >
               <div className="relative">
                 <span className="text-2xl lg:text-3xl font-bold" style={{ color: '#414288' }}>
-                  Startfinity
+                  Essygrow
                 </span>
                 <span className="absolute -top-1 -right-2 text-xs font-semibold px-1.5 py-0.5 rounded-full" 
                   style={{ backgroundColor: '#B0DB43', color: '#1a1a1a' }}>
@@ -186,9 +185,9 @@ export default function Header() {
                   <Phone className="w-4 h-4 text-gray-900" />
                 </div>
                 <div>
-                  <div className="text-xs text-gray-600">Call us 24/7</div>
-                  <a href="tel:+919157142657" className="text-sm font-semibold hover:text-[#414288] transition-colors">
-                    +91 9157142657
+                  <div className="text-xs text-gray-600"></div>
+                  <a href="" className="text-sm font-semibold hover:text-[#414288] transition-colors">
+                    
                   </a>
                 </div>
               </div>
