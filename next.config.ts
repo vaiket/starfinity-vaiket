@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "essygrow.com",
+        hostname: "eazygrow.com",
       },
     ],
   },

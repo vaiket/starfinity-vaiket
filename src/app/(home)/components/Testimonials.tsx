@@ -59,7 +59,7 @@
 //   },
 //   {
 //     name: "Retail Business, Maharashtra",
-//     text: "Easygrow helped us choose the right scheme and avoided unnecessary delays in filing.",
+//     text: "EazyGrow helped us choose the right scheme and avoided unnecessary delays in filing.",
 //   },
 //   {
 //     name: "Startup Founder, Karnataka",

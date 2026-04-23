@@ -23,7 +23,7 @@ const steps = [
     
   },
   {
-    title: "trategic Opportunity Mapping ",
+    title: "Trategic Opportunity Mapping ",
     description: "Our experts identify the most relevant funding options and outline a clear, actionable roadmap tailored to your business..",
     icon: Handshake,
     color: "bg-gradient-to-r from-[#2E7D32] via-[#66BB6A] to-[#3F51B5]",
@@ -46,10 +46,10 @@ const steps = [
 ];
 
 const outcomes = [
-  "Simple communication and fewer surprises",
-  "Structured document flow",
-  "Clear status updates during processing",
-  "Support aligned to Indian MSME needs",
+  "End-to-end transparency in communication",
+  "Optimized documentation workflows",
+  "Continuous progress visibility",
+  "Expert MSME-focused guidance",
 ];
 
 export default function SecureFundingProcess() {

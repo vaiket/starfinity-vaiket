@@ -48,10 +48,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = serviceBySlug[slug];
   if (!service) {
-    return { title: "Service Not Found | Easygrow" };
+    return { title: "Service Not Found | EazyGrow" };
   }
   return {
-    title: `${service.title} | Easygrow Services`,
+    title: `${service.title} | EazyGrow Services`,
     description: service.shortDescription,
   };
 }

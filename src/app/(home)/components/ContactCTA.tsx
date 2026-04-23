@@ -26,24 +26,86 @@ const defaultForm = {
   status: "new",
 };
 
+const defaultErrors = {
+  name: "",
+  mobile: "",
+  email: "",
+  business_name: "",
+  required_funding: "",
+};
+
 export default function ContactCTA() {
   const [formData, setFormData] = useState(defaultForm);
+  const [errors, setErrors] = useState(defaultErrors);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const validateField = (name: string, value: string) => {
+    let error = "";
+
+    switch (name) {
+      case "name":
+        if (!value.trim()) error = "Name is required";
+        else if (!/^[a-zA-Z\s]+$/.test(value)) error = "Name must contain only letters";
+        else if (value.length < 2) error = "Name must be at least 2 characters";
+        break;
+      case "mobile":
+        if (!value.trim()) error = "Phone number is required";
+        else if (!/^[0-9]+$/.test(value)) error = "Phone number must contain only digits";
+        else if (value.length !== 10) error = "Phone number must be exactly 10 digits";
+        break;
+      case "email":
+        if (!value.trim()) error = "Email is required";
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = "Please enter a valid email address";
+        break;
+      case "business_name":
+        if (!value.trim()) error = "Business name is required";
+        else if (value.length < 2) error = "Business name must be at least 2 characters";
+        break;
+      case "required_funding":
+        if (!value.trim()) error = "Funding amount is required";
+        else if (!/^[0-9]+$/.test(value.replace(/,/g, ""))) error = "Funding amount must contain only numbers";
+        break;
+    }
+
+    return error;
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Validate the field on change
+    const error = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setStatus(null);
+
+    // Validate all fields
+    const newErrors = {
+      name: validateField("name", formData.name),
+      mobile: validateField("mobile", formData.mobile),
+      email: validateField("email", formData.email),
+      business_name: validateField("business_name", formData.business_name),
+      required_funding: validateField("required_funding", formData.required_funding),
+    };
+
+    setErrors(newErrors);
+
+    // Check if there are any errors
+    if (Object.values(newErrors).some((error) => error !== "")) {
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await createLead(formData);
       setStatus({ type: "success", message: "Application submitted. We will call you soon." });
       setFormData(defaultForm);
+      setErrors(defaultErrors);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to submit right now.";
       setStatus({ type: "error", message });
@@ -81,53 +143,68 @@ export default function ContactCTA() {
             <div className="lg:col-span-2">
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    required
-                    onChange={handleChange}
-                    placeholder="Name"
-                    className={`w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] ${sourceSerif.className}`}
-                  />
-                  <input
-                    type="tel"
-                    name="mobile"
-                    value={formData.mobile}
-                    required
-                    onChange={handleChange}
-                    placeholder="Phone"
-                    className={`w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] ${sourceSerif.className}`}
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      required
+                      onChange={handleChange}
+                      placeholder="Name"
+                      className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 ${errors.name ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-[#2E7D32]'} ${sourceSerif.className}`}
+                    />
+                    {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="tel"
+                      name="mobile"
+                      value={formData.mobile}
+                      required
+                      onChange={handleChange}
+                      placeholder="Phone"
+                      className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 ${errors.mobile ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-[#2E7D32]'} ${sourceSerif.className}`}
+                    />
+                    {errors.mobile && <p className="mt-1 text-xs text-red-600">{errors.mobile}</p>}
+                  </div>
                 </div>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  required
-                  onChange={handleChange}
-                  placeholder="Email"
-                  className={`w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] ${sourceSerif.className}`}
-                />
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    required
+                    onChange={handleChange}
+                    placeholder="Email"
+                    className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-[#2E7D32]'} ${sourceSerif.className}`}
+                  />
+                  {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    name="business_name"
-                    value={formData.business_name}
-                    required
-                    onChange={handleChange}
-                    placeholder="Business Name"
-                    className={`w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] ${sourceSerif.className}`}
-                  />
-                  <input
-                    type="text"
-                    name="required_funding"
-                    value={formData.required_funding}
-                    required
-                    onChange={handleChange}
-                    placeholder="Funding Needed"
-                    className={`w-full px-3 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] ${sourceSerif.className}`}
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      name="business_name"
+                      value={formData.business_name}
+                      required
+                      onChange={handleChange}
+                      placeholder="Business Name"
+                      className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 ${errors.business_name ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-[#2E7D32]'} ${sourceSerif.className}`}
+                    />
+                    {errors.business_name && <p className="mt-1 text-xs text-red-600">{errors.business_name}</p>}
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="required_funding"
+                      value={formData.required_funding}
+                      required
+                      onChange={handleChange}
+                      placeholder="Funding Needed"
+                      className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 ${errors.required_funding ? 'border-red-500 focus:border-red-500' : 'border-slate-300 focus:border-[#2E7D32]'} ${sourceSerif.className}`}
+                    />
+                    {errors.required_funding && <p className="mt-1 text-xs text-red-600">{errors.required_funding}</p>}
+                  </div>
                 </div>
                 <select
                   name="funding_type"
@@ -190,7 +267,7 @@ export default function ContactCTA() {
                   <div className="w-8 h-8 rounded-lg bg-[#2E7D32]/10 flex items-center justify-center">
                     <PhoneCall className="text-[#2E7D32] w-4 h-4" />
                   </div>
-                  <span className={`font-semibold text-slate-900 text-sm ${bricolage.className}`}>Call Us</span>
+                  <span className={`font-semibold text-slate-900 text-sm ${bricolage.className}`}>Request CallBack</span>
                 </div>
                 <p className={`text-xs text-slate-600 mb-3 ${sourceSerif.className}`}>
                   Speak directly with our funding advisors

@@ -354,9 +354,9 @@ export default function AdminPage() {
   const [newUserEmail, setNewUserEmail] = useState("");
   const [userNotice, setUserNotice] = useState<NoticeState>(null);
 
-  const [emailSubject, setEmailSubject] = useState("Startup funding update from Easygrow");
+  const [emailSubject, setEmailSubject] = useState("Startup funding update from EazyGrow");
   const [emailBody, setEmailBody] = useState(
-    "Hello,\n\nWe are sharing fresh funding opportunities and support for your business. Reply to this email to connect with our advisor.\n\nRegards,\nEasygrow Team"
+    "Hello,\n\nWe are sharing fresh funding opportunities and support for your business. Reply to this email to connect with our advisor.\n\nRegards,\nEazyGrow Team"
   );
   const [emailAudience, setEmailAudience] = useState<"all-users" | "new-users" | "selected-users">("all-users");
   const [selectedEmailUserIds, setSelectedEmailUserIds] = useState<string[]>([]);
@@ -812,7 +812,7 @@ export default function AdminPage() {
           <div className="h-16 border-b border-white/10 px-5 flex items-center justify-between">
             <div>
               <p className="text-[11px] uppercase tracking-widest text-indigo-200">Admin Console</p>
-              <p className="text-lg font-bold">Easygrow CRM</p>
+              <p className="text-lg font-bold">EazyGrow CRM</p>
             </div>
             <button
               className="md:hidden p-1.5 rounded-lg hover:bg-white/10"

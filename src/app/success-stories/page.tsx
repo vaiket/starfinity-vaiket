@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Users,
   TrendingUp,
@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Bricolage_Grotesque } from 'next/font/google';
 import { Source_Serif_4 } from 'next/font/google';
+import ApplicationPopup from "@/app/(home)/components/ApplicationPopup";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -180,69 +181,14 @@ const SuccessStories = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [animationDirection, setAnimationDirection] = useState<'left' | 'right' | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const [isApplicationPopupOpen, setIsApplicationPopupOpen] = useState(false);
+  const prevCategoryRef = useRef(selectedCategory);
 
   // Reset current index when category changes
   useEffect(() => {
-    setCurrentIndex(0);
-  }, [selectedCategory]);
-
-  const handlePrevSlide = () => {
-    if (currentIndex === 0) return;
-    setAnimationDirection('right');
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => prev - 1);
-      setIsAnimating(false);
-    }, 300);
-  };
-
-  const handleNextSlide = () => {
-    const filtered = selectedCategory === "All"
-      ? testimonials
-      : testimonials.filter(t => t.category === selectedCategory);
-    const maxIndex = Math.ceil(filtered.length / 3) - 1;
-    if (currentIndex >= maxIndex) return;
-    setAnimationDirection('left');
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
-      setIsAnimating(false);
-    }, 300);
-  };
-
-  // Auto-play testimonials - right to left
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const filtered = selectedCategory === "All"
-        ? testimonials
-        : testimonials.filter(t => t.category === selectedCategory);
-      const maxIndex = Math.ceil(filtered.length / 3) - 1;
-
-      setAnimationDirection('right');
-      setIsAnimating(true);
-
-      setTimeout(() => {
-        setCurrentIndex((prevIndex) => {
-          return prevIndex === 0 ? maxIndex : prevIndex - 1;
-        });
-        setIsAnimating(false);
-      }, 300);
-    }, 5000); // Change slide every 5 seconds
-
-    return () => clearInterval(timer);
+    if (prevCategoryRef.current !== selectedCategory) {
+      prevCategoryRef.current = selectedCategory;
+    }
   }, [selectedCategory]);
 
   const stats = [
@@ -271,7 +217,7 @@ const SuccessStories = () => {
     //   icon: <MapPin className="w-6 h-6" />
     // }
   ];
-
+        
   const categories = [
     "All", "Agriculture", "Technology", "Manufacturing", "Export", 
     "Handicrafts", "Food & Beverage", "Business Services", "Renewable Energy"
@@ -303,8 +249,8 @@ const SuccessStories = () => {
         {/* Stats Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-12 lg:mb-16">
           {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center gap-4 mb-4">
+            <div key={index} className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 text-center">
+              <div className="flex items-center justify-center gap-4 mb-4">
                 <div className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 text-slate-600">
                   {stat.icon}
                 </div>
@@ -351,15 +297,25 @@ const SuccessStories = () => {
                 }
               }
               .animate-marquee {
-                animation: marquee 15s linear infinite;
+                animation: marquee 150s linear infinite;
               }
-              .group:hover .animate-marquee {
+              .animate-marquee.paused {
                 animation-play-state: paused;
               }
             `}</style>
 
             {/* Duplicated testimonials for seamless infinite loop */}
-            <div className="flex gap-6 animate-marquee">
+            <div 
+              className="flex gap-6 animate-marquee w-max py-4"
+              onMouseEnter={(e) => {
+                const target = e.currentTarget;
+                target.classList.add('paused');
+              }}
+              onMouseLeave={(e) => {
+                const target = e.currentTarget;
+                target.classList.remove('paused');
+              }}
+            >
               {[...filteredTestimonials, ...filteredTestimonials].map((testimonial, index) => (
                 <div
                   key={`${testimonial.id}-${index}`}
@@ -421,10 +377,19 @@ const SuccessStories = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8">
-                <button className={`px-6 sm:px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg ${sourceSerif.className}`}>
-                  Start Your Journey
-                </button>
-                <button className={`px-6 sm:px-8 py-3 bg-transparent border-2 border-white rounded-lg font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105 ${sourceSerif.className}`}>
+                <a
+                  href="https://forms.gle/WFtF9S34pJYzmdye6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`px-6 sm:px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg ${sourceSerif.className}`}
+                >
+                 Start Your Journey
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsApplicationPopupOpen(true)}
+                  className={`px-6 sm:px-8 py-3 bg-transparent border-2 border-white rounded-lg font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105 ${sourceSerif.className}`}
+                >
                   Talk to Expert
                 </button>
               </div>
@@ -495,6 +460,11 @@ const SuccessStories = () => {
             </div>
           </div>
         </div>
+        
+        <ApplicationPopup
+          open={isApplicationPopupOpen}
+          onClose={() => setIsApplicationPopupOpen(false)}
+        />
       </div>
     </div>
   );

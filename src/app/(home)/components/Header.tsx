@@ -11,7 +11,11 @@ const NAV_ITEMS = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
   { href: "/success-stories", label: "Success Stories" },
+  
   { href: "/about", label: "About Us" },
+  { href: "/blogs", label: "Blog" },
+   
+
 ];
 
 export default function Header() {
@@ -86,7 +90,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="h-16 lg:h-20 flex items-center justify-between gap-3">
             <Link href="/" className="flex items-center" aria-label="Go to homepage">
-              <Image src="/utp.png" alt="Essygrow" width={150} height={44} className="h-8 lg:h-10 w-auto" priority />
+              <Image src="/utp.png" alt="EazyGrow" width={150} height={44} className="h-8 lg:h-10 w-auto" priority />
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1" aria-label="Desktop navigation">

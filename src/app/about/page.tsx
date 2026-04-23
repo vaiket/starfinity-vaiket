@@ -59,10 +59,10 @@ const AboutUs = () => {
   ];
 
   const leadershipTeam = [
-    { id: 1, name: 'Bhadoriya Mohini', position: 'Co-Founder', experience: '5+ years experience', role: 'Strategy, Partnerships & Business Growth', initials: 'MB', avatarGradient: `linear-gradient(135deg,${theme.indigo800},${theme.green700})`, social: ['linkedin'] },
-    { id: 2, name: 'Dev Kishan', position: 'CEO', experience: '8+ years experience', role: 'Leadership, Execution & Company Operations', initials: 'DK', avatarGradient: `linear-gradient(135deg,${theme.indigo700},${theme.purple500})`, social: ['linkedin'] },
-    { id: 3, name: 'Himanshu', position: 'Legal Head', experience: '6+ years experience', role: 'Compliance, Legal Framework & Risk Management', initials: 'H', avatarGradient: `linear-gradient(135deg,${theme.green600},${theme.lime500})`, social: ['linkedin'] },
-    { id: 4, name: 'Nikita', position: ' HR Head', experience: '4+ years experience', role: 'Talent, Culture & People Management', initials: 'NB', avatarGradient: `linear-gradient(135deg,${theme.purple500},${theme.lime500})`, social: ['linkedin'] },
+    { id: 1, name: 'Bhadoriya Mohini', position: 'Co-Founder', experience: '5+ years experience', role: 'Strategy, Partnerships & Business Growth', initials: 'MB', avatarGradient: `linear-gradient(135deg,${theme.indigo800},${theme.green700})`, social: ['linkedin'], linkedinUrl: 'https://www.linkedin.com/in/mohini-bhadoriya-56605b276?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
+    { id: 2, name: 'Dev Kishan', position: 'CEO', experience: '8+ years experience', role: 'Leadership, Execution & Company Operations', initials: 'DK', avatarGradient: `linear-gradient(135deg,${theme.indigo700},${theme.purple500})`, social: ['linkedin'], linkedinUrl: 'https://www.linkedin.com/in/balkishan-parihar-41771a35a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },
+    { id: 3, name: 'Himanshu', position: 'Legal Head', experience: '6+ years experience', role: 'Compliance, Legal Framework & Risk Management', initials: 'H', avatarGradient: `linear-gradient(135deg,${theme.green600},${theme.lime500})`, social: ['linkedin'], linkedinUrl: 'https://www.linkedin.com/in/himanshu-agrawal-961370244?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
+    { id: 4, name: 'Nikita', position: ' HR Head', experience: '4+ years experience', role: 'Talent, Culture & People Management', initials: 'NB', avatarGradient: `linear-gradient(135deg,${theme.purple500},${theme.lime500})`, social: ['linkedin'], linkedinUrl: 'https://www.linkedin.com/in/nikita-bansal-3b8b4b23a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app' },               
   ];
 
   const stats = [
@@ -128,7 +128,7 @@ const AboutUs = () => {
               <Building size={14} /> About EazyGrow Ventures
             </div>
             <h1 className="egv-fu-2" style={{ fontFamily: 'var(--font-bricolage)', fontSize: 'clamp(30px,5vw,58px)', color: '#fff', fontWeight: 700, lineHeight: 1.15, marginBottom: 16 }}>
-              We started  <span style={{ color: theme.lime500 }}>Essygrow</span><br />
+              We started  <span style={{ color: theme.lime500 }}>EazyGrow</span><br />
               <span style={{ color: theme.lime300 }}>with one mission !</span>
             </h1>
             <p className="egv-fu-3" style={{ fontSize: 16, color: 'rgba(255,255,255,.72)', maxWidth: 560, margin: '0 auto 48px', lineHeight: 1.85, fontWeight: 300 }}>
@@ -243,25 +243,25 @@ const AboutUs = () => {
         </div>
 
         {/* OUR STORY */}
-        <div style={{ background: 'linear-gradient(135deg,#262A76 0%,#25296D 50%,#1B1F5A 100%)', padding: '88px 40px', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ background: 'linear-gradient(135deg,#262A76 0%,#25296D 50%,#1B1F5A 100%)', padding: 'clamp(40px,8vw,88px) clamp(20px,5vw,40px)', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 50% 80% at 0% 50%,rgba(217,240,106,.06),transparent)' }} />
-          <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 60, alignItems: 'center', position: 'relative' }}>
+          <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 'clamp(30px,5vw,60px)', alignItems: 'center', position: 'relative' }}>
             <div ref={addRef} className="egv-anim-left">
               <span style={{ ...eyebrow, color: '#C9DB6B', letterSpacing: 2.6, fontSize: 10 }}>Our Story</span>
-              <h2 style={{ fontFamily: 'var(--font-bricolage)', fontSize: 'clamp(28px,3.2vw,52px)', color: '#FFFFFF', fontWeight: 700, lineHeight: 1.18, maxWidth: 500, margin: '10px 0 24px' }}>Building <span style={{ color: '#C9DB6B' }}>Business Dreams</span><br />into Reality</h2>
-              <p style={{ color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 2, marginBottom: 18, maxWidth: 510 }}>At EazyGrow Ventures, we provide end-to-end startup and business consultancy services, allowing founders and growing businesses to focus on momentum while we handle funding, legal, and operational complexities.</p>
-              <p style={{ color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 2, marginBottom: 32, maxWidth: 520 }}>Our expert team simplifies incorporation, compliance, taxation, investor readiness, and regulatory filings, ensuring smooth and efficient operations. Whether you&apos;re a startup, small business, or scaling enterprise, we tailor our solutions to your specific needs.</p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
-                {[['3+', 'Years Experience'], ['1000+', 'Startups Onboarded'], ['50+', 'Services Offered']].map(([n, l]) => (
-                  <div key={l} className="egv-exp-card" style={{ background: 'rgba(71,75,157,.28)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 12, padding: '18px 16px', textAlign: 'center', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.04)', backdropFilter: 'blur(6px)', transition: 'background .3s,transform .3s', cursor: 'default' }}>
-                    <span style={{ fontFamily: 'var(--font-bricolage)', fontSize: 32, fontWeight: 700, color: '#C9DB6B', display: 'block', lineHeight: 1 }}>{n}</span>
-                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,.48)', letterSpacing: 1.1, textTransform: 'uppercase', marginTop: 8, display: 'block' }}>{l}</span>
+              <h2 style={{ fontFamily: 'var(--font-bricolage)', fontSize: 'clamp(24px,3.2vw,52px)', color: '#FFFFFF', fontWeight: 700, lineHeight: 1.18, maxWidth: 500, margin: '10px 0 24px' }}>Building <span style={{ color: '#C9DB6B' }}>Business Dreams</span><br />into Reality</h2>
+              <p style={{ color: 'rgba(255,255,255,.72)', fontSize: 'clamp(13px,1.5vw,15px)', lineHeight: 2, marginBottom: 18, maxWidth: 510 }}>At EazyGrow Ventures, we provide end-to-end startup and business consultancy services, allowing founders and growing businesses to focus on momentum while we handle funding, legal, and operational complexities.</p>
+              <p style={{ color: 'rgba(255,255,255,.72)', fontSize: 'clamp(13px,1.5vw,15px)', lineHeight: 2, marginBottom: 32, maxWidth: 520 }}>Our expert team simplifies incorporation, compliance, taxation, investor readiness, and regulatory filings, ensuring smooth and efficient operations. Whether you&apos;re a startup, small business, or scaling enterprise, we tailor our solutions to your specific needs.</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 12 }}>
+                {[['4+', 'Years Experience'], ['20,000+', 'Startups Onboarded'], ['50+', 'Services Offered']].map(([n, l]) => (
+                  <div key={l} className="egv-exp-card" style={{ background: 'rgba(71,75,157,.28)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 12, padding: 'clamp(12px,2vw,18px) clamp(10px,1.5vw,16px)', textAlign: 'center', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.04)', backdropFilter: 'blur(6px)', transition: 'background .3s,transform .3s', cursor: 'default' }}>
+                    <span style={{ fontFamily: 'var(--font-bricolage)', fontSize: 'clamp(24px,3vw,32px)', fontWeight: 700, color: '#C9DB6B', display: 'block', lineHeight: 1 }}>{n}</span>
+                    <span style={{ fontSize: 'clamp(8px,1vw,10px)', color: 'rgba(255,255,255,.48)', letterSpacing: 1.1, textTransform: 'uppercase', marginTop: 8, display: 'block' }}>{l}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div ref={addRef} className="egv-anim-right" style={{ position: 'relative', padding: 100 }}>
-              <div style={{ background: 'linear-gradient(135deg,rgba(34,51,88,.92),rgba(23,56,82,.88))', border: '1px solid rgba(208,221,255,.12)', borderRadius: 18, textAlign: 'center', minHeight: 500, minWidth: 500, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', boxShadow: '0 22px 60px rgba(5,10,35,.20)' }}>
+            <div ref={addRef} className="egv-anim-right" style={{ position: 'relative', padding: 'clamp(20px,5vw,100px)' }}>
+              <div style={{ background: 'linear-gradient(135deg,rgba(34,51,88,.92),rgba(23,56,82,.88))', border: '1px solid rgba(208,221,255,.12)', borderRadius: 18, textAlign: 'center', minHeight: 'clamp(300px,40vw,500px)', minWidth: 'clamp(280px,80vw,500px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', boxShadow: '0 22px 60px rgba(5,10,35,.20)' }}>
                 <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'linear-gradient(180deg,rgba(255,255,255,.03),transparent 32%)' }} />
                 <Image src="/proffesional team 2.jpeg" alt="Professional Business Team" width={500} height={500} style={{ borderRadius: 18, position: 'absolute', inset: 0, objectFit: 'cover' }} />
               </div>
@@ -305,13 +305,13 @@ const AboutUs = () => {
                 <div style={{ color: theme.muted, fontSize: 12, marginBottom: 8 }}>{m.experience}</div>
                 <p style={{ color: theme.muted, fontSize: 12, lineHeight: 1.6, marginBottom: 16 }}>{m.role}</p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
-                  {m.social.includes('linkedin') && <a href="https://www.linkedin.com/company/eazygrow-ventures-private-limited/" target="_blank" rel="noopener noreferrer" className="egv-social" style={{ padding: '5px 30px', borderRadius: 8, background: 'rgba(91,70,214,.10)', color: theme.indigo700, border: '1px solid rgba(91,70,214,.16)', cursor: 'pointer', transition: 'background .3s,color .3s,border-color .3s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Linkedin size={20} /></a>}
+                  {m.social.includes('linkedin') && <a href={m.linkedinUrl || "https://www.linkedin.com/company/eazygrow-ventures-private-limited/"} target="_blank" rel="noopener noreferrer" className="egv-social" style={{ padding: '5px 30px', borderRadius: 8, background: 'rgba(91,70,214,.10)', color: theme.indigo700, border: '1px solid rgba(91,70,214,.16)', cursor: 'pointer', transition: 'background .3s,color .3s,border-color .3s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Linkedin size={20} /></a>}
                 </div>
               </div>
             ))}
           </div>
         </div>
-
+        
         MILESTONES
         {/* <div style={{ background: `linear-gradient(135deg,${theme.indigo900} 0%,#171C50 100%)`, padding: '84px 40px' }}>
           <div ref={addRef} className="egv-anim" style={{ textAlign: 'center', marginBottom: 48 }}>

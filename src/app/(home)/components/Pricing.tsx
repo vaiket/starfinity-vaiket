@@ -48,6 +48,7 @@ const pricingPlans = [
       // "50% refund if agreed targets or milestones are not achieved within the period.",
       "Progress updates shared at every stage.",
       "Dedicated relationship manager assigned throughout.",
+      "Success Fee: 1-2% of Funds Raised (Applicable Post-disbursement)",
     ],
   },
   {
@@ -66,7 +67,7 @@ const pricingPlans = [
       "Complete documentation and guideline support throughout the process.",
       "Financial Project & Grant Deck outlining financials, ",
       "projections, and funding potential.",
-
+      "Success Fee: 1-2% of Funds Raised (Applicable Post-disbursement)",
     ],
     featured: true,
   },
@@ -93,7 +94,7 @@ const pricingPlans = [
     ],
   },
   {
-    badge: "Till Certificate",
+    badge: "Tax Certificate",
     title: "80-IAC Tax Exemption Plan",
     price: "₹ 99,999",
     description:
@@ -135,7 +136,7 @@ export default function Pricing() {
           {pricingPlans.map((plan) => (
             (() => {
               const message = encodeURIComponent(
-                `Hello Easygrow, I want to book the ${plan.title} plan.\n\nPlan Duration: ${plan.badge}\nPrice: ${plan.price}${
+                `Hello EazyGrow, I want to book the ${plan.title} plan.\n\nPlan Duration: ${plan.badge}\nPrice: ${plan.price}${
                   plan.originalPrice ? `\nOld Price: ${plan.originalPrice}` : ""
                 }\nSection: Pricing Plans\n\nPlease share the next steps.`
               );
