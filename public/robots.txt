@@ -1,0 +1,11 @@
+User-agent: *
+
+Allow: /
+
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/
+
+Sitemap: https://www.essygrow.com/sitemap.xml
+
+Host: https://www.essygrow.com
