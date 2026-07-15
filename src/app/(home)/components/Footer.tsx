@@ -123,7 +123,7 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-1.5 text-[#d9e7ff] sm:gap-2">
                 <MapPin className="mt-0.5 h-3 w-3 text-[#74a2ff] sm:h-3.5 sm:w-3.5" />
-                315 Sahitya Arcade, Ahmedabad
+                
               </div>
             </div>
 
