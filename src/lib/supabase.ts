@@ -11,6 +11,9 @@ export type LeadFormPayload = {
 export type LeadRecord = LeadFormPayload & {
   id?: string | number;
   created_at?: string;
+  welcome_email_status?: "not_requested" | "pending" | "accepted" | "failed" | "sandbox";
+  welcome_email_sent_at?: string | null;
+  welcome_email_error?: string | null;
 };
 
 async function readApiError(response: Response, fallbackMessage: string) {

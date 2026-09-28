@@ -102,8 +102,10 @@ export default function ContactCTA() {
 
     setIsSubmitting(true);
     try {
-      await createLead(formData);
-      setStatus({ type: "success", message: "Application submitted. We will call you soon." });
+      const lead = await createLead(formData);
+      setStatus({ type: "success", message: lead.welcome_email_status === "accepted"
+        ? "Application submitted. A confirmation email is on its way—please check your inbox or spam folder. We will call you soon."
+        : "Application submitted. We will call you soon. No need to submit again." });
       setFormData(defaultForm);
       setErrors(defaultErrors);
     } catch (error) {

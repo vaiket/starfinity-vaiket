@@ -160,3 +160,21 @@ export async function listLeadsFromSupabase(): Promise<LeadRecord[]> {
 
   return (await response.json()) as LeadRecord[];
 }
+
+export async function updateLeadEmailStatus(id: string | number, status: "accepted" | "failed" | "sandbox", error?: string): Promise<LeadRecord> {
+  const { restBase } = getSupabaseConfig();
+  const response = await fetch(`${restBase}/${TABLE_NAME}?id=eq.${encodeURIComponent(String(id))}`, {
+    method: "PATCH",
+    headers: { ...buildHeaders(), Prefer: "return=representation" },
+    body: JSON.stringify({
+      welcome_email_status: status,
+      welcome_email_sent_at: status === "accepted" ? new Date().toISOString() : null,
+      welcome_email_error: error || null,
+    }),
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error("Unable to update confirmation email status.");
+  const rows = await response.json() as LeadRecord[];
+  if (!rows[0]) throw new Error("Lead not found while updating email status.");
+  return rows[0];
+}

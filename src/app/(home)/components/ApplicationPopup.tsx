@@ -60,10 +60,12 @@ export default function ApplicationPopup({ open, onClose }: ApplicationPopupProp
     setIsSubmitting(true);
 
     try {
-      await createLead(formData);
+      const lead = await createLead(formData);
       setStatus({
         type: "ok",
-        message: "Application submitted successfully. We will contact you soon.",
+        message: lead.welcome_email_status === "accepted"
+          ? "Application submitted. A confirmation email is on its way—please check your inbox or spam folder."
+          : "Application submitted successfully. We will contact you soon. No need to submit again.",
       });
       setFormData(defaultForm);
     } catch (error) {

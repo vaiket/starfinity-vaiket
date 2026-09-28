@@ -39,14 +39,12 @@ import {
 } from "chart.js";
 import { Doughnut, Line } from "react-chartjs-2";
 import { LeadRecord, listLeads } from "@/lib/supabase";
+import { buildAdminEmail, MAX_EMAIL_RECIPIENTS } from "@/lib/email-content.mjs";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Tooltip, Legend, Filler);
 
-const SESSION_KEY = "admin-authenticated";
 const MANUAL_USERS_KEY = "admin-manual-users";
-const MAX_BULK_EMAIL_RECIPIENTS = 1000;
-const ADMIN_USERNAME = process.env.NEXT_PUBLIC_ADMIN_USERNAME ?? "admin";
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? "admin123";
+const MAX_BULK_EMAIL_RECIPIENTS = MAX_EMAIL_RECIPIENTS;
 
 const MENU_ITEMS = [
   { id: "overview", label: "Dashboard", icon: LayoutDashboard },
@@ -202,18 +200,19 @@ function LeadsTable({ rows, isLoading }: LeadsTableProps) {
               <th className="text-left px-4 py-3 font-semibold text-slate-600">Funding</th>
               <th className="text-left px-4 py-3 font-semibold text-slate-600">Type</th>
               <th className="text-left px-4 py-3 font-semibold text-slate-600">Status</th>
+              <th className="text-left px-4 py-3 font-semibold text-slate-600">Confirmation email</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td className="px-4 py-10 text-slate-500" colSpan={8}>
+                <td className="px-4 py-10 text-slate-500" colSpan={9}>
                   Loading leads...
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td className="px-4 py-10 text-slate-500" colSpan={8}>
+                <td className="px-4 py-10 text-slate-500" colSpan={9}>
                   No leads found.
                 </td>
               </tr>
@@ -230,6 +229,11 @@ function LeadsTable({ rows, isLoading }: LeadsTableProps) {
                   <td className="px-4 py-3">
                     <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${getStatusPillClass(lead.status)}`}>
                       {normalizeStatus(lead.status)}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span title={lead.welcome_email_error || ""} className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${lead.welcome_email_status === "accepted" ? "bg-emerald-50 text-emerald-700" : lead.welcome_email_status === "failed" ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"}`}>
+                      {lead.welcome_email_status === "accepted" ? "Queued with Mailjet" : lead.welcome_email_status === "failed" ? "Failed — use Email tab" : lead.welcome_email_status === "sandbox" ? "Test only" : lead.welcome_email_status === "pending" ? "Pending" : "Not requested"}
                     </span>
                   </td>
                 </tr>
@@ -362,11 +366,18 @@ export default function AdminPage() {
   const [selectedEmailUserIds, setSelectedEmailUserIds] = useState<string[]>([]);
   const [isEmailSending, setIsEmailSending] = useState(false);
   const [emailNotice, setEmailNotice] = useState<NoticeState>(null);
+  const [mailConfig, setMailConfig] = useState<{configured: boolean; sender: string; sandbox: boolean} | null>(null);
+  const [emailFailures, setEmailFailures] = useState<Array<{email: string; error?: string}>>([]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const hasSession = window.localStorage.getItem(SESSION_KEY) === "true";
-    setIsLoggedIn(hasSession);
+    void fetch("/api/admin/session", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((session) => {
+        setIsLoggedIn(session.authenticated === true);
+        if (session.username) setUsername(session.username);
+      })
+      .catch(() => setIsLoggedIn(false));
 
     const savedUsers = window.localStorage.getItem(MANUAL_USERS_KEY);
     if (!savedUsers) return;
@@ -388,6 +399,10 @@ export default function AdminPage() {
   useEffect(() => {
     if (!isLoggedIn) return;
     void fetchLeads();
+    void fetch("/api/admin/email", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then(setMailConfig)
+      .catch(() => setMailConfig(null));
   }, [isLoggedIn]);
 
   const fetchLeads = async () => {
@@ -404,28 +419,37 @@ export default function AdminPage() {
     }
   };
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoginError("");
 
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    try {
+      const response = await fetch("/api/admin/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Login failed.");
       setIsLoggedIn(true);
-      if (typeof window !== "undefined") {
-        window.localStorage.setItem(SESSION_KEY, "true");
-      }
-      return;
+      setPassword("");
+    } catch (error) {
+      setLoginError(error instanceof Error ? error.message : "Login failed. Please try again.");
     }
-
-    setLoginError("Invalid username or password.");
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/admin/session", { method: "DELETE" });
+      if (!response.ok) throw new Error("Logout failed. Please try again.");
+    } catch {
+      setError("Logout failed. Please try again.");
+      return;
+    }
     setIsLoggedIn(false);
     setUsername("");
     setPassword("");
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(SESSION_KEY);
-    }
+    setLeads([]);
   };
 
   const filteredLeads = useMemo(() => {
@@ -736,7 +760,9 @@ export default function AdminPage() {
 
   const handleSendBulkMail = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isEmailSending) return;
     setEmailNotice(null);
+    setEmailFailures([]);
 
     if (!emailSubject.trim()) {
       setEmailNotice({ type: "error", message: "Email subject is required." });
@@ -752,16 +778,22 @@ export default function AdminPage() {
     }
 
     setIsEmailSending(true);
-    await new Promise((resolve) => setTimeout(resolve, 1100));
-    setIsEmailSending(false);
-
-    setEmailNotice({
-      type: "success",
-      message:
-        overLimitCount > 0
-          ? `Bulk email sent to ${emailRecipients.length} users. ${overLimitCount} users remain for next batch.`
-          : `Bulk email sent to ${emailRecipients.length} users successfully.`,
-    });
+    try {
+      const response = await fetch("/api/admin/email", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject: emailSubject, body: emailBody, recipients: emailRecipients.map((user) => ({ email: user.email, name: user.name })) }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Email request failed.");
+      setEmailFailures((result.results || []).filter((item: {status: string}) => item.status === "failed"));
+      setEmailNotice({ type: result.failed ? "error" : "success", message: result.sandbox
+        ? `Test successful: ${result.accepted} emails validated; no emails delivered.${result.failed ? ` ${result.failed} failed.` : ""}`
+        : `${result.accepted} emails accepted by Mailjet for delivery.${result.failed ? ` ${result.failed} failed—see details below.` : ""}${overLimitCount ? ` ${overLimitCount} recipients were not included; select them separately for the next batch.` : ""}` });
+    } catch (error) {
+      setEmailNotice({ type: "error", message: error instanceof Error ? error.message : "Email request failed. Check Mailjet before retrying." });
+    } finally {
+      setIsEmailSending(false);
+    }
   };
 
   if (!isLoggedIn) {
@@ -1183,7 +1215,9 @@ export default function AdminPage() {
               </div>
 
               <div className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm text-indigo-800">
-                Bulk mailing option enabled. You can send up to <span className="font-semibold">1000 emails at a time</span>.
+                {mailConfig?.configured ? `Sender: ${mailConfig.sender}. ` : "Mailjet configuration unavailable. "}
+                {mailConfig?.sandbox ? "Sandbox mode: no emails will be delivered. " : "Emails are sent through Mailjet. "}
+                Send up to <span className="font-semibold">{MAX_BULK_EMAIL_RECIPIENTS} recipients per batch</span>; each recipient receives a private, branded email.
                 {overLimitCount > 0 && (
                   <span className="ml-1">
                     Current audience exceeds limit by <span className="font-semibold">{overLimitCount}</span> users.
@@ -1222,6 +1256,7 @@ export default function AdminPage() {
                       <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">Subject</label>
                       <input
                         value={emailSubject}
+                        maxLength={180}
                         onChange={(event) => setEmailSubject(event.target.value)}
                         className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/25"
                         placeholder="Campaign subject"
@@ -1232,10 +1267,12 @@ export default function AdminPage() {
                       <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">Email Content</label>
                       <textarea
                         value={emailBody}
+                        maxLength={12000}
                         onChange={(event) => setEmailBody(event.target.value)}
                         rows={8}
                         className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/25"
                       />
+                      <p className="mt-1 text-xs text-slate-500">Use {"{{name}}"} to personalize the recipient&apos;s name. Send only relevant messages to recipients who expect to hear from you.</p>
                     </div>
 
                     {emailNotice && (
@@ -1250,19 +1287,20 @@ export default function AdminPage() {
                       </div>
                     )}
 
+                    {emailFailures.length > 0 && <ul className="text-xs text-rose-700 space-y-1" aria-label="Failed email recipients">{emailFailures.map((item) => <li key={item.email}>{item.email}: {item.error || "Not accepted by Mailjet"}</li>)}</ul>}
                     <button
                       type="submit"
-                      disabled={isEmailSending}
+                      disabled={isEmailSending || !mailConfig?.configured || emailRecipients.length === 0}
                       className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 font-medium disabled:opacity-60"
                     >
                       {isEmailSending ? <RefreshCcw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                      Send Bulk Mail
+                      {isEmailSending ? "Sending…" : `Send to ${emailRecipients.length} recipients`}
                     </button>
                   </form>
                 </div>
 
                 <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
-                  <h3 className="text-base font-semibold text-slate-900">Preview</h3>
+                  <h3 className="text-base font-semibold text-slate-900">Branded preview</h3>
                   <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
                     <p className="text-xs uppercase tracking-wide text-slate-500">Subject</p>
                     <p className="mt-1 text-sm font-semibold text-slate-900">{emailSubject || "-"}</p>
@@ -1271,6 +1309,7 @@ export default function AdminPage() {
                     <p className="text-xs uppercase tracking-wide text-slate-500">Message</p>
                     <p className="mt-1 text-sm whitespace-pre-wrap text-slate-700">{emailBody || "-"}</p>
                   </div>
+                  <iframe title="Branded email preview" sandbox="" srcDoc={buildAdminEmail({ name: emailRecipients[0]?.name || "Recipient" }, emailSubject, emailBody).html} className="mt-3 w-full h-[480px] rounded-xl border border-slate-200 bg-white" />
                 </div>
               </div>
 
@@ -1333,7 +1372,7 @@ export default function AdminPage() {
                 <p className="text-sm text-slate-500 mt-1">Environment-based credentials are active for this panel.</p>
                 <div className="mt-4 space-y-3 text-sm">
                   <div className="flex items-center gap-2 text-slate-700">
-                    <Users className="w-4 h-4 text-indigo-500" /> Username: {ADMIN_USERNAME}
+                    <Users className="w-4 h-4 text-indigo-500" /> Username: {username}
                   </div>
                   <div className="flex items-center gap-2 text-slate-700">
                     <Mail className="w-4 h-4 text-indigo-500" /> Email leads: {kpis.withEmail}

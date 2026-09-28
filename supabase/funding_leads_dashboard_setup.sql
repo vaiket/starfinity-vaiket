@@ -1,5 +1,6 @@
 -- Easygrow Admin Dashboard DB setup
--- Run in Supabase SQL Editor
+-- Run npm run db:setup, or paste into Supabase SQL Editor.
+-- No anonymous/authenticated access to customer lead records.
 
 create extension if not exists pgcrypto;
 
@@ -24,6 +25,11 @@ alter table public.funding_leads add column if not exists updated_at timestamptz
 alter table public.funding_leads add column if not exists notes text null;
 alter table public.funding_leads add column if not exists source text not null default 'website';
 alter table public.funding_leads add column if not exists priority smallint not null default 2;
+-- Historical leads were not emailed by this integration.
+alter table public.funding_leads add column if not exists welcome_email_status text not null default 'not_requested';
+alter table public.funding_leads alter column welcome_email_status set default 'pending';
+alter table public.funding_leads add column if not exists welcome_email_sent_at timestamptz;
+alter table public.funding_leads add column if not exists welcome_email_error text;
 
 do $$
 begin
@@ -54,6 +60,7 @@ create index if not exists idx_funding_leads_mobile on public.funding_leads (mob
 create or replace function public.set_funding_leads_updated_at()
 returns trigger
 language plpgsql
+set search_path = public
 as $$
 begin
   new.updated_at = now();
@@ -69,35 +76,19 @@ for each row execute function public.set_funding_leads_updated_at();
 alter table public.funding_leads enable row level security;
 
 drop policy if exists "allow anon insert funding leads" on public.funding_leads;
-create policy "allow anon insert funding leads"
-on public.funding_leads
-for insert
-to anon
-with check (true);
 
 drop policy if exists "allow authenticated read funding leads" on public.funding_leads;
-create policy "allow authenticated read funding leads"
-on public.funding_leads
-for select
-to authenticated
-using (true);
 
 drop policy if exists "allow anon read funding leads" on public.funding_leads;
-create policy "allow anon read funding leads"
-on public.funding_leads
-for select
-to anon
-using (true);
 
 drop policy if exists "allow service role full access funding leads" on public.funding_leads;
-create policy "allow service role full access funding leads"
-on public.funding_leads
-for all
-to service_role
-using (true)
-with check (true);
 
-create or replace view public.funding_leads_daily_summary as
+revoke all on public.funding_leads from public, anon, authenticated;
+grant usage on schema public to service_role;
+grant select, insert, update, delete on public.funding_leads to service_role;
+
+create or replace view public.funding_leads_daily_summary
+with (security_invoker = true) as
 select
   date_trunc('day', created_at)::date as day,
   count(*) as total_leads,
@@ -105,3 +96,8 @@ select
 from public.funding_leads
 group by 1
 order by 1 desc;
+
+revoke all on public.funding_leads_daily_summary from public, anon, authenticated;
+grant select on public.funding_leads_daily_summary to service_role;
+
+notify pgrst, 'reload schema';
