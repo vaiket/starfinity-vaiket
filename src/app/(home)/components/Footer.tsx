@@ -140,7 +140,7 @@ export default function Footer() {
             {[
               { name: "Privacy Policy", href: "/privacy-policy" },
               { name: "Terms & Conditions", href: "/terms-and-conditions" },
-              { name: "Refund Policy", href: "/refund-policy" },
+              { name: "Refund & Cancellation Policy", href: "/refund-policy" },
             ].map((item) => (
               <Link key={item.name} href={item.href} className={`text-gray-500 transition hover:text-gray-900 ${sourceSerif.className} sm:text-xs md:text-xs lg:text-sm`}>
                 {item.name}
