@@ -1,29 +1,7 @@
 ﻿"use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import {
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  CheckCircle,
-  ChevronUp,
-  Home,
-  User,
-  Briefcase,
-  Star,
-  DollarSign,
-  BarChart3,
-  Rocket,
-  Target,
-  Factory,
-  FileText,
-} from "lucide-react";
+import { Facebook, Linkedin, Instagram, Mail, Phone, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import { Bricolage_Grotesque } from 'next/font/google';
 import { Source_Serif_4 } from 'next/font/google';
@@ -39,33 +17,6 @@ const sourceSerif = Source_Serif_4({
 });
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [emailError, setEmailError] = useState("");
-  const currentYear = new Date().getFullYear();
-
-  const handleSubscribe = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!email) {
-      setEmailError("Email is required");
-      return;
-    }
-    if (!email.includes("@")) {
-      setEmailError("Please include @ in your email");
-      return;
-    }
-    setEmailError("");
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubscribed(true);
-      setIsSubmitting(false);
-      setEmail("");
-      setTimeout(() => setIsSubscribed(false), 4500);
-    }, 1200);
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -83,7 +34,7 @@ export default function Footer() {
               <p className="text-[9px] font-semibold tracking-wide text-[#93b2ff] sm:text-[10px]">EAZYGROW VENTURES</p>
               <h3 className={`mt-1 text-sm font-bold text-white ${bricolage.className} sm:text-base md:text-lg lg:text-2xl`}>Funding support for growing businesses</h3>
               <p className={`mt-1 text-[9px] text-[#b8c6e8] leading-snug sm:text-[14px] ${sourceSerif.className}`}>
-               "Trusted guidance for MSME loans, startup funding, and growth advisory across India"
+               &quot;Trusted guidance for MSME loans, startup funding, and growth advisory across India&quot;
               </p>
             </div>
             <a
@@ -117,13 +68,13 @@ export default function Footer() {
                 <Phone className="mt-0.5 h-3 w-3 text-[#74a2ff] sm:h-3.5 sm:w-3.5" />
                 +91 7041894751
               </a>
-              <a href="mailto:info@eazygrow.com" className="flex items-start gap-1.5 text-[#d9e7ff] transition hover:text-white sm:gap-2">
+              <a href="mailto:info@essygrow.com" className="flex items-start gap-1.5 text-[#d9e7ff] transition hover:text-white sm:gap-2">
                 <Mail className="mt-0.5 h-3 w-3 text-[#74a2ff] sm:h-3.5 sm:w-3.5" />
-                info@eazygrow.com
+                info@essygrow.com
               </a>
               <div className="flex items-start gap-1.5 text-[#d9e7ff] sm:gap-2">
-           
-                
+
+
               </div>
             </div>
 
@@ -153,132 +104,35 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="space-y-2 lg:col-span-8 sm:space-y-3 md:space-y-6">
-            <div className="grid grid-cols-1 gap-2 sm:gap-3 md:gap-4 lg:grid-cols-3 lg:gap-6">
-              {/* Quick Links box — blue kept */}
-              <div className="rounded-md border border-[#1f2f5d] bg-[#041033] p-2 sm:rounded-lg sm:p-3 md:rounded-xl md:p-4">
-                <h4 className={`mb-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-white ${bricolage.className} sm:mb-2 sm:text-xs md:text-sm lg:text-base`}>Quick Links</h4>
-                <ul className={`space-y-1 text-[9px] sm:space-y-1.5 sm:text-[10px] md:text-sm ${sourceSerif.className}`}>
-                  {[
-                    { name: "Home", href: "/", icon: <Home className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "About Us", href: "/about", icon: <User className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Services", href: "/services", icon: <Briefcase className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Success Stories", href: "/success-stories", icon: <Star className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Contact", href: "/contact", icon: <Phone className="h-3 w-3 text-[#74a2ff]" /> },
-                  ].map((link) => (
-                    <li key={link.name}>
-                      <Link href={link.href} className="flex items-center gap-1 text-[#bdd0f8] transition hover:text-white sm:gap-1.5">
-                        {link.icon}
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Services box — green and blue solid border */}
-              <div className="rounded-md border-4 border-[ #10b981] p-2 shadow-[0_0_20px_rgba( 16,185,129,0.4)] sm:rounded-lg sm:p-3 md:rounded-xl md:p-4 lg:p-5" style={{ background: 'linear-gradient(135deg, #1a237e 0%, #0d4a4a 50%, #065f46 100%)' }}>
-                <h4 className={`mb-1.5 text-[9px] font-bold uppercase tracking-[0.08em] text-white ${bricolage.className} sm:mb-2 sm:text-[10px] md:text-xs lg:text-base`}>Our Services</h4>
-                <ul className={`space-y-1 text-[9px] text-[#bdd0f8] sm:space-y-1.5 sm:text-[10px] md:text-sm ${sourceSerif.className}`}>
-                  {[
-                    { name: "MSME Loans", icon: <DollarSign className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Working Capital", icon: <BarChart3 className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Startup Funding", icon: <Rocket className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Business Grants", icon: <Target className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Equipment Finance", icon: <Factory className="h-3 w-3 text-[#74a2ff]" /> },
-                    { name: "Project Reports", icon: <FileText className="h-3 w-3 text-[#74a2ff]" /> },
-                  ].map((item) => (
-                    <li key={item.name} className="flex items-center gap-1 sm:gap-1.5">
-                      {item.icon}
-                      {item.name}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Terms & Conditions box - blue kept */}
-              <div className="rounded-md border border-[#1f2f5d] bg-[#041033] p-2 sm:rounded-lg sm:p-3 md:rounded-xl md:p-4">
-                <h4 className={`mb-1.5 text-[9px] font-bold uppercase tracking-[0.08em] text-white ${bricolage.className} sm:mb-2 sm:text-[10px] md:text-xs lg:text-base`}>Legal</h4>
-                <div className={`space-y-1.5 text-[9px] sm:space-y-2 sm:text-[10px] md:text-sm ${sourceSerif.className}`}>
-                  <Link href="/privacy-policy" className="flex items-start gap-1 text-[#d9e7ff] transition hover:text-white sm:gap-1.5">
-                    <FileText className="mt-0.5 h-3 w-3 text-[#74a2ff]" />
-                    Privacy Policy
-                  </Link>
-                  <Link href="/terms-and-conditions" className="flex items-start gap-1 text-[#d9e7ff] transition hover:text-white sm:gap-1.5">
-                    <FileText className="mt-0.5 h-3 w-3 text-[#74a2ff]" />
-                    Terms & Conditions
-                  </Link>
-                  <Link href="/refund-policy" className="flex items-start gap-1 text-[#d9e7ff] transition hover:text-white sm:gap-1.5">
-                    <FileText className="mt-0.5 h-3 w-3 text-[#74a2ff]" />
-                    Refund Policy
-                  </Link>
-                </div>
-
-                <div className="mt-2 sm:mt-3 md:mt-5">
-                  {isSubscribed ? (
-                    <div className="flex items-center gap-1.5 rounded-md border border-emerald-300/30 bg-emerald-500/15 px-2 py-1 text-[9px] text-emerald-200 sm:px-2.5 sm:py-1.5 sm:text-[10px] md:text-sm">
-                      <CheckCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4" />
-                      <span className={sourceSerif.className}>Subscribed!</span>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleSubscribe} className="space-y-1.5 sm:space-y-2">
-                      <div className="flex gap-1.5">
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                            setEmailError("");
-                          }}
-                          placeholder="Your email"
-                          className={`min-w-0 flex-1 rounded-md border px-2 py-1 text-[9px] text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 sm:px-2.5 sm:py-1.5 sm:text-[10px] md:text-sm ${emailError ? 'border-red-500 focus:ring-red-500/30' : 'border-[#2b3f72] focus:ring-[#4e73ff]/30'}`}
-                          style={{ color: 'white', WebkitTextFillColor: 'white', backgroundColor: '#081c49' }}
-                          required
-                        />
-                        <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white text-blue-600 transition hover:bg-gray-100 disabled:opacity-60 sm:h-8 sm:w-8 md:h-10 md:w-10"
-                          aria-label="Subscribe"
-                        >
-                          {isSubmitting ? (
-                            <div className="h-2.5 w-2.5 animate-spin rounded-full border-2 border-blue-600/30 border-t-blue-600 sm:h-3 sm:w-3 md:h-4 md:w-4" />
-                          ) : (
-                            <Send className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-4 md:w-4" />
-                          )}
-                        </button>
-                      </div>
-                      {emailError && <p className={`text-[9px] text-red-400 ${sourceSerif.className} sm:text-[10px] md:text-xs`}>{emailError}</p>}
-                      <p className={`text-[9px] text-[#9db0d8] ${sourceSerif.className} sm:text-[10px] md:text-xs`}>Get funding insights and updates.</p>
-                    </form>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Stats row — blue kept, hidden on very small screens */}
-            <div className="hidden md:block rounded-lg border border-[#1f2f5d] bg-[#041033] p-2 sm:rounded-xl sm:p-2.5 md:rounded-2xl md:p-3 lg:p-4">
-              <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-2.5 lg:gap-3 lg:grid-cols-4">
-                {[
-                  { name: "Trusted by 20,000+", desc: "Businesses" },
-                  { name: "4.8 Rating", desc: "Client Experience" },
-                  { name: "NBFCs", desc: "Partner Network" },
-                  { name: "PAN India", desc: "Coverage" },
-                ].map((item) => (
-                  <div key={item.name} className="rounded border border-[#2b3f72] bg-[#071945] p-1.5 sm:rounded-lg sm:p-2 md:rounded-xl md:p-2.5 lg:p-3 text-center">
-                    <p className={`text-xs font-semibold text-white ${bricolage.className} sm:text-sm`}>{item.name}</p>
-                    <p className={`mt-0.5 text-[10px] text-[#9db0d8] ${sourceSerif.className} sm:text-xs`}>{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Disclaimer and payment note */}
+        <div className="lg:col-span-8 rounded-lg border border-gray-200 bg-gray-50 p-3 text-gray-600 sm:p-4 md:p-6">
+          <h4 className={`text-xs font-bold uppercase tracking-[0.08em] text-gray-900 sm:text-sm ${bricolage.className}`}>Disclaimer</h4>
+          <p className={`mt-2 text-[10px] leading-relaxed sm:text-xs md:text-sm ${sourceSerif.className}`}>
+            EAZYGROW VENTURES PRIVATE LIMITED is an independent, private-sector startup advisory and business consulting company. We are not a government body and are not affiliated with, endorsed by, or authorized by the Government of India, the Ministry of Corporate Affairs (MCA), Startup India, or any other government agency or department.
+          </p>
+          <p className={`mt-2 text-[10px] leading-relaxed sm:text-xs md:text-sm ${sourceSerif.className}`}>
+            Our services include assistance with business registrations, startup recognition, compliance management, certifications, licensing, funding support, grant application assistance, documentation, and other advisory services. Eligible applicants may also complete registrations and filings directly through official government portals, including mca.gov.in, startupindia.gov.in, and other relevant government platforms.
+          </p>
+          <h4 className={`mt-4 text-xs font-bold uppercase tracking-[0.08em] text-gray-900 sm:text-sm ${bricolage.className}`}>Payment Note</h4>
+          <p className={`mt-2 text-[10px] leading-relaxed sm:text-xs md:text-sm ${sourceSerif.className}`}>
+            Payments for services provided by EAZYGROW VENTURES PRIVATE LIMITED are generally accepted only in the company&apos;s official name through its designated Current Account or approved digital payment channels, including NEFT, IMPS, RTGS, and UPI.
+          </p>
+          <p className={`mt-2 text-[10px] leading-relaxed sm:text-xs md:text-sm ${sourceSerif.className}`}>
+            For certain specialized services, including but not limited to legal, compliance, documentation, certification, registration, filing, or execution-related activities, payments may be securely routed through authorized execution partners, associates, or aligned service providers, including LVC Legalvala Consultancy LLP, where applicable. Such transactions shall be supported by valid tax invoices, agreements, payment confirmations, or other appropriate documentation issued by the respective authorized entity.
+          </p>
+          <p className={`mt-2 text-[10px] leading-relaxed sm:text-xs md:text-sm ${sourceSerif.className}`}>
+            Clients are advised to make payments only to bank accounts or payment details officially communicated by EAZYGROW VENTURES PRIVATE LIMITED or its authorized execution partners. The company shall not be responsible for payments made to unauthorized individuals, personal accounts, or entities that have not been formally approved or communicated by the company.
+          </p>
         </div>
+
+        </div>
+
+
 
         {/* Bottom bar — white bg, dark text (sits on white footer bg) */}
         <div className="mt-2 flex flex-col items-center justify-between gap-2 border-t border-gray-200 pt-2 sm:gap-3 sm:mt-3 sm:pt-3 md:gap-4 md:mt-4 md:pt-4 lg:flex-row">
           <div className="text-center lg:text-left">
-            <p className={`text-[9px] text-gray-600 ${sourceSerif.className} sm:text-[10px]`}> {currentYear} EAZYGROW VENTURES PRIVATE LIMITED. All rights reserved.</p>
+            <p className={`text-[9px] text-gray-600 ${sourceSerif.className} sm:text-[10px]`}>Copyright © 2026 EAZYGROW VENTURES PRIVATE LIMITED. All rights reserved.</p>
             <p className={`mt-0.5 text-[9px] text-gray-400 ${sourceSerif.className} sm:mt-1 sm:text-[10px]`}>Registered with MCA | CIN: U69202GJ2025PTC171089</p>
           </div>
 

@@ -10,7 +10,6 @@ import ApplicationPopup from "./ApplicationPopup";
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
-  { href: "/success-stories", label: "Success Stories" },
   
   { href: "/about", label: "About Us" },
   { href: "/blogs", label: "Blog" },

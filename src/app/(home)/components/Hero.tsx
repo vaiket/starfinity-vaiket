@@ -62,11 +62,11 @@ export default function Hero() {
           <div className="text-[#041230] text-left">
             <div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.08em] sm:text-[10px] ${bricolage.className}`} style={{ lineHeight: '1.2', whiteSpace: 'normal' }}>
               <Sparkles className="h-3 w-3 text-[#000] " />
-              <span>Eazygrow Ventures - Built For India's Next-Gen Founders</span>
+              <span>Eazygrow Ventures - Built For India&apos;s Next-Gen Founders</span>
             </div>
 
             <h1 className={`mt-5 text-3xl font-extrabold leading-[1.06] tracking-tight sm:text-4xl lg:text-5xl ${bricolage.className}`} style={{ fontWeight: 900 }}>
-              We Don't Just Guide  <span style={{ background: 'linear-gradient(90deg, #2E7D32, #66BB6A, #3F51B5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>startup </span>
+              We Don&apos;t Just Guide  <span style={{ background: 'linear-gradient(90deg, #2E7D32, #66BB6A, #3F51B5)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>startup </span>
               <span className="block"> We Build Startups That Actually Scale</span>
             </h1>
             <br />
@@ -144,16 +144,14 @@ export default function Hero() {
               <p
                 className={`text-base leading-relaxed text-gray-700 ${sourceSerif.className} text-justify mx-auto max-w-3xl`}
               >
-                EazyGrow Ventures is a comprehensive startup consultancy firm dedicated to empowering India's next-generation founders. We provide end-to-end support from ideation to execution, helping businesses secure funding, build scalable strategies, and achieve sustainable growth.
+                EazyGrow Ventures is a comprehensive startup consultancy firm dedicated to empowering India&apos;s next-generation founders. We provide end-to-end support from ideation to execution, helping businesses secure funding, build scalable strategies, and achieve sustainable growth.
               </p>
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className="rounded-xl border border-[#d4e6e1] bg-white p-4">
-                  <div className="text-3xl font-bold" style={{ color: '#2E7D32' }}>4+</div>
-                  <div className={`text-sm text-gray-600 ${sourceSerif.className}`}>Years Experience</div>
+                  <div className="text-base font-bold sm:text-lg" style={{ color: '#2E7D32' }}>Promoters&apos; Core Legacy</div>
                 </div>
                 <div className="rounded-xl border border-[#d4e6e1] bg-white p-4">
-                  <div className="text-3xl font-bold" style={{ color: '#2E7D32' }}>100+</div>
-                  <div className={`text-sm text-gray-600 ${sourceSerif.className}`}>Expert Team</div>
+                  <div className="text-base font-bold sm:text-lg" style={{ color: '#2E7D32' }}>Comprehensive Advisory Network</div>
                 </div>
               </div>
             </div>

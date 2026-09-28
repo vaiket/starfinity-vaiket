@@ -19,7 +19,7 @@ export default function TermsAndConditions() {
           <section className="mb-10 pb-8 border-b border-gray-100">
             <h2 className="text-xl font-bold text-black mb-4">1. Acceptance of Terms</h2>
             <p className="text-black leading-relaxed mb-4">
-              These Terms and Conditions ("Terms") govern the use of the website www.eazygrow.com and all services provided by EazyGrow Financial Services Pvt. Ltd. ("EazyGrow", "Company", "we", "us"). By accessing our website, submitting an inquiry, making a payment, or engaging our services, you ("Client", "User", "you") agree to be legally bound by these Terms.
+              These Terms and Conditions ("Terms") govern the use of the website www.eazygrow.com and all services provided by Eazygrow Ventures Private Limited ("EazyGrow", "Company", "we", "us"). By accessing our website, submitting an inquiry, making a payment, or engaging our services, you ("Client", "User", "you") agree to be legally bound by these Terms.
             </p>
             <p className="text-black leading-relaxed mb-4">
               If you do not accept these Terms, you must immediately discontinue use of our website and services. We reserve the right to modify these Terms at any time without prior notice.
@@ -87,7 +87,7 @@ export default function TermsAndConditions() {
           <section className="mb-10 pb-8 border-b border-gray-100">
             <h2 className="text-xl font-bold text-black mb-4">7. Intellectual Property</h2>
             <p className="text-black leading-relaxed mb-4">
-              All content on the EasyGrow website, including text, graphics, logos, reports, pitch deck templates, and service documentation frameworks, is the exclusive intellectual property of EasyGrow Financial Services Pvt. Ltd. You may not copy, reproduce, distribute, or create derivative works without prior written permission.
+              All content on the EasyGrow website, including text, graphics, logos, reports, pitch deck templates, and service documentation frameworks, is the exclusive intellectual property of Eazygrow Ventures Private Limited. You may not copy, reproduce, distribute, or create derivative works without prior written permission.
             </p>
             <p className="text-black leading-relaxed">
               Documents prepared specifically for the client (e.g., custom pitch decks, project reports) become the client's property upon full payment of service fees.

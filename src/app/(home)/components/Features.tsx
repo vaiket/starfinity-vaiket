@@ -52,12 +52,6 @@ const featureItems = [
   },
 ];
 
-const stats = [
-  { label: "Businesses Assisted", value: "20,000+" },
-  { label: "Funding Facilitated", value: "Rs 120 Cr+" },
-  { label: "States Covered", value: "28" },
-  { label: "Avg First Response", value: "< 2 hrs" },
-];
 
 export default function Features() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -90,7 +84,7 @@ export default function Features() {
   return (
     <section className="bg-white px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-20">
       <div className="mx-auto max-w-7xl">
-        
+
         {/* Header */}
         <div className="text-center">
           <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 ${bricolage.className}`}>
@@ -108,7 +102,7 @@ export default function Features() {
 
         {/* Slider */}
         <div className="mt-10 relative">
-          
+
           {/* ✅ Added side padding to prevent overlap */}
           <div className="overflow-hidden px-6 sm:px-10">
             <div
@@ -120,7 +114,7 @@ export default function Features() {
               {featureItems.map((item, index) => (
                 <div key={index} className="w-full sm:w-1/2 lg:w-1/3 flex-shrink-0 px-2">
                   <article className="h-full rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
-                    
+
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-r from-[#2E7D32] via-[#66BB6A] to-[#3F51B5] text-white">
                       <item.icon className="h-5 w-5" />
                     </div>
@@ -132,12 +126,12 @@ export default function Features() {
                     {item.isCapitalNetwork ? (
                       <div className={`mt-3 text-sm text-slate-600 ${sourceSerif.className}`}>
                         <div className="flex gap-2 mb-1">
-                          <Users className="w-4 h-4 text-green-700 mt-1" />
-                          <span>300+ Active Angel Investors</span>
+                          <Users className="w-4 h-4 shrink-0 text-green-700 mt-1" />
+                          <span>Strategic Angel Network Access</span>
                         </div>
                         <div className="flex gap-2 mb-1">
                           <Building2 className="w-4 h-4 text-green-700 mt-1" />
-                          <span>323+ Venture Capital & Institutional Funding Connects</span>
+                          <span>Institutional &amp; Venture Capital Framework Connections</span>
                         </div>
                         <div className="flex gap-2">
                           <Globe className="w-4 h-4 text-green-700 mt-1" />
@@ -184,21 +178,7 @@ export default function Features() {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="mt-10 rounded-2xl border bg-gradient-to-r from-[#f8faff] to-[#f5faea] p-5 sm:p-7">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {stats.map((item) => (
-              <div key={item.label} className="text-center">
-                <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#414288]">
-                  {item.value}
-                </p>
-                <p className={`mt-1 text-sm text-slate-600 ${sourceSerif.className}`}>
-                  {item.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
     </section>
   );

@@ -19,7 +19,7 @@ export default function PrivacyPolicy() {
           <section className="mb-10 pb-8 border-b border-gray-100">
             <h2 className="text-xl font-bold text-black mb-4">1. Introduction</h2>
             <p className="text-black leading-relaxed mb-4">
-              EazyGrow Financial Services Pvt. Ltd. (hereinafter referred to as "EazyGrow", "we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store, share, and protect the personal information you provide when you access our website (www.eazygrow.com), use our services, or interact with us in any way.
+              Eazygrow Ventures Private Limited (hereinafter referred to as "EazyGrow", "we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store, share, and protect the personal information you provide when you access our website (www.eazygrow.com), use our services, or interact with us in any way.
             </p>
             <p className="text-black leading-relaxed">
               By accessing our website or availing our services, you agree to the terms of this Privacy Policy. If you do not agree, please discontinue use of our website and services immediately.
@@ -140,7 +140,7 @@ export default function PrivacyPolicy() {
               <li className="list-disc"><strong>Right to Grievance Redressal:</strong> Lodge a complaint with our Grievance Officer or MEITY's Data Protection Board.</li>
             </ul>
             <p className="text-black leading-relaxed mt-4">
-              To exercise any of these rights, write to us at: <strong>info@eazygrow.com</strong> with the subject line "Data Rights Request".
+              To exercise any of these rights, write to us at: <strong>info@essygrow.com</strong> with the subject line "Data Rights Request".
             </p>
           </section>
 
@@ -171,9 +171,9 @@ export default function PrivacyPolicy() {
               In accordance with the Information Technology Act, 2000 and the DPDP Act, 2023, the details of our Grievance Officer are:
             </p>
             <ul className="space-y-2 text-black">
-              <li><strong className="text-black">Organization:</strong> EazyGrow Financial Services Pvt. Ltd.</li>
+              <li><strong className="text-black">Organization:</strong> Eazygrow Ventures Private Limited</li>
               <li><strong className="text-black">Address:</strong> 315 Sahitya Arcade, Ahmedabad, Gujarat, India</li>
-              <li><strong className="text-black">Email:</strong> info@eazygrow.com</li>
+              <li><strong className="text-black">Email:</strong> info@essygrow.com</li>
               <li><strong className="text-black">Phone:</strong> +91 7041894751</li>
               <li><strong className="text-black">Response Time:</strong> Grievances will be acknowledged within 48 hours and resolved within 30 days.</li>
             </ul>
