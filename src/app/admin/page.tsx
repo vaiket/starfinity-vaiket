@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Activity,
   BarChart3,
@@ -340,7 +340,6 @@ function UsersTable({ rows, isLoading, selectable = false, selectedIds = [], onT
 
 export default function AdminPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -351,8 +350,7 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [searchText, setSearchText] = useState("");
 
-  const requestedTab = searchParams.get("tab") as MenuId | null;
-  const [activeMenu, setActiveMenu] = useState<MenuId>(requestedTab && MENU_ITEMS.some((item) => item.id === requestedTab) ? requestedTab : "overview");
+  const [activeMenu, setActiveMenu] = useState<MenuId>("overview");
   const [broadcastEmails, setBroadcastEmails] = useState("");
   const [broadcastFile, setBroadcastFile] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -371,8 +369,9 @@ export default function AdminPage() {
   );
   const [emailHtmlMode, setEmailHtmlMode] = useState(false);
   useEffect(() => {
+    const requestedTab = new URLSearchParams(window.location.search).get("tab") as MenuId | null;
     if (requestedTab && MENU_ITEMS.some((item) => item.id === requestedTab)) setActiveMenu(requestedTab);
-  }, [requestedTab]);
+  }, []);
   const changeMenu = (id: MenuId) => { setActiveMenu(id); router.push("/admin?tab=" + id, { scroll: false }); };
   const parseBroadcastFile = (file: File) => { setBroadcastFile(file.name); const reader = new FileReader(); reader.onload = () => setBroadcastEmails(String(reader.result || "")); reader.readAsText(file); };
   const loadBroadcastAudience = () => {
