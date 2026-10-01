@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Activity,
   BarChart3,
@@ -51,6 +52,7 @@ const MENU_ITEMS = [
   { id: "leads", label: "Lead Manager", icon: ClipboardList },
   { id: "users", label: "User Management", icon: Users },
   { id: "email", label: "Email Management", icon: Mail },
+  { id: "broadcast", label: "Email Broadcast", icon: Send },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "activity", label: "Live Activity", icon: Activity },
   { id: "settings", label: "Settings", icon: Settings },
@@ -337,6 +339,8 @@ function UsersTable({ rows, isLoading, selectable = false, selectedIds = [], onT
 }
 
 export default function AdminPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -347,7 +351,10 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [searchText, setSearchText] = useState("");
 
-  const [activeMenu, setActiveMenu] = useState<MenuId>("overview");
+  const requestedTab = searchParams.get("tab") as MenuId | null;
+  const [activeMenu, setActiveMenu] = useState<MenuId>(requestedTab && MENU_ITEMS.some((item) => item.id === requestedTab) ? requestedTab : "overview");
+  const [broadcastEmails, setBroadcastEmails] = useState("");
+  const [broadcastFile, setBroadcastFile] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const importFileRef = useRef<HTMLInputElement | null>(null);
 
@@ -362,6 +369,26 @@ export default function AdminPage() {
   const [emailBody, setEmailBody] = useState(
     "Hello,\n\nWe are sharing fresh funding opportunities and support for your business. Reply to this email to connect with our advisor.\n\nRegards,\nEazyGrow Team"
   );
+  const [emailHtmlMode, setEmailHtmlMode] = useState(false);
+  useEffect(() => {
+    if (requestedTab && MENU_ITEMS.some((item) => item.id === requestedTab)) setActiveMenu(requestedTab);
+  }, [requestedTab]);
+  const changeMenu = (id: MenuId) => { setActiveMenu(id); router.push("/admin?tab=" + id, { scroll: false }); };
+  const parseBroadcastFile = (file: File) => { setBroadcastFile(file.name); const reader = new FileReader(); reader.onload = () => setBroadcastEmails(String(reader.result || "")); reader.readAsText(file); };
+  const loadBroadcastAudience = () => {
+    const rows = broadcastEmails.split(/\r?\n/).map((row) => row.trim()).filter(Boolean);
+    const parsed = rows.map((row, index) => {
+      const parts = row.split(/[;,]/).map((part) => part.trim());
+      const email = parts.find((part) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(part)) || "";
+      return email ? { id: "broadcast-" + index + "-" + email, name: parts.find((part) => part !== email) || "there", mobile: "", email, joinedDate: new Date().toISOString(), source: "import" as ManagedUserSource } : null;
+    }).filter((row): row is ManagedUser => Boolean(row));
+    const unique = Array.from(new Map(parsed.map((row) => [row.email.toLowerCase(), row])).values()).slice(0, MAX_BULK_EMAIL_RECIPIENTS);
+    setManualUsers((current) => [...current.filter((row) => !row.id.startsWith("broadcast-")), ...unique]);
+    setSelectedEmailUserIds(unique.map((row) => row.id));
+    setEmailAudience("selected-users");
+    setActiveMenu("email");
+    router.push("/admin?tab=email", { scroll: false });
+  };
   const [emailAudience, setEmailAudience] = useState<"all-users" | "new-users" | "selected-users">("all-users");
   const [selectedEmailUserIds, setSelectedEmailUserIds] = useState<string[]>([]);
   const [isEmailSending, setIsEmailSending] = useState(false);
@@ -781,7 +808,7 @@ export default function AdminPage() {
     try {
       const response = await fetch("/api/admin/email", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject: emailSubject, body: emailBody, recipients: emailRecipients.map((user) => ({ email: user.email, name: user.name })) }),
+        body: JSON.stringify({ subject: emailSubject, body: emailBody, html: emailHtmlMode, recipients: emailRecipients.map((user) => ({ email: user.email, name: user.name })) }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Email request failed.");
@@ -864,7 +891,7 @@ export default function AdminPage() {
                   type="button"
                   key={item.id}
                   onClick={() => {
-                    setActiveMenu(item.id);
+                    changeMenu(item.id);
                     setSidebarOpen(false);
                   }}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
@@ -1193,6 +1220,20 @@ export default function AdminPage() {
             </div>
           )}
 
+          {activeMenu === "broadcast" && (
+            <div className="space-y-5">
+              <div className="rounded-2xl bg-gradient-to-r from-indigo-700 to-violet-600 p-6 text-white shadow-sm"><p className="text-xs uppercase tracking-[0.2em] text-indigo-200">Campaign Studio</p><h2 className="mt-2 text-2xl font-bold">Email Broadcast</h2><p className="mt-1 text-sm text-indigo-100">Import contacts, craft a message and send through Brevo SMTP.</p></div>
+              <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+                <div className="xl:col-span-2 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><h3 className="font-semibold text-slate-900">Audience &amp; content</h3>
+                  <div className="mt-4 rounded-xl border-2 border-dashed border-indigo-200 bg-indigo-50/40 p-5"><label className="flex cursor-pointer items-center gap-3 text-sm font-medium text-indigo-700"><Upload className="h-5 w-5" />{broadcastFile || "Upload CSV (email,name)"}<input type="file" accept=".csv,text/csv" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) parseBroadcastFile(file); }} /></label><p className="mt-2 text-xs text-slate-500">CSV columns: email, name. You can also paste emails or CSV rows below.</p></div>
+                  <textarea value={broadcastEmails} onChange={(event) => setBroadcastEmails(event.target.value)} rows={6} placeholder={"Paste emails or CSV rows here\nrahul@example.com, Rahul"} className="mt-4 w-full rounded-xl border border-slate-300 px-3 py-3 font-mono text-sm" />
+                  <button type="button" onClick={loadBroadcastAudience} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 font-medium text-white hover:bg-indigo-700"><Send className="h-4 w-4" />Continue to Composer</button>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><h3 className="font-semibold text-slate-900">Broadcast checklist</h3><div className="mt-4 space-y-3 text-sm text-slate-600"><p>✓ CSV upload and direct paste</p><p>✓ Duplicate filtering</p><p>✓ Personalized {"{{name}}"} messages</p><p>✓ Final preview before send</p></div></div>
+              </div>
+            </div>
+          )}
+
           {activeMenu === "email" && (
             <div className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -1264,7 +1305,7 @@ export default function AdminPage() {
                     </div>
 
                     <div>
-                      <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">Email Content</label>
+                      <div className="flex items-center justify-between"><label className="text-xs font-semibold uppercase tracking-wide text-slate-500">Email Content</label><label className="text-xs font-medium text-indigo-700"><input type="checkbox" checked={emailHtmlMode} onChange={(event) => setEmailHtmlMode(event.target.checked)} className="mr-2" />HTML mode</label></div>
                       <textarea
                         value={emailBody}
                         maxLength={12000}

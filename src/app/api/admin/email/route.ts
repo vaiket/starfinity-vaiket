@@ -35,7 +35,8 @@ export async function POST(request: Request) {
     recipients.set(email, { email, name: recipient.name?.trim() || "there" });
   }
   try {
-    const result = await sendAdminEmails([...recipients.values()], body.subject.trim(), body.body.trim());
+    if (body.html !== undefined && typeof body.html !== "boolean") return NextResponse.json({ error: "HTML mode must be a boolean." }, { status: 400 });
+    const result = await sendAdminEmails([...recipients.values()], body.subject.trim(), body.body.trim(), body.html === true);
     return NextResponse.json(result, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Email request failed. Check Mailjet before retrying." }, { status: 502 });

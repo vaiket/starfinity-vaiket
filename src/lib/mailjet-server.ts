@@ -30,7 +30,7 @@ export async function sendThankYouEmail(lead: LeadRecord) {
   return "accepted" as const;
 }
 
-export async function sendAdminEmails(recipients: Array<{email: string; name: string}>, subject: string, body: string) {
-  const messages = recipients.map((recipient) => ({ ...recipient, ...buildAdminEmail(recipient, subject, body) }));
+export async function sendAdminEmails(recipients: Array<{email: string; name: string}>, subject: string, body: string, htmlMode = false) {
+  const messages = recipients.map((recipient) => ({ ...recipient, ...buildAdminEmail(recipient, subject, body, htmlMode) }));
   return sendSmtpEmails(messages, config());
 }
