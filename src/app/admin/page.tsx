@@ -837,7 +837,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-[#eef1f8] text-slate-900">
       <div className="flex min-h-screen">
         <aside
-          className={`fixed md:static inset-y-0 left-0 z-40 w-64 bg-[#1f2a44] text-white transform transition-transform duration-300 ${
+          className={`fixed inset-y-0 left-0 z-40 h-screen w-64 overflow-y-auto bg-[#1f2a44] text-white transform transition-transform duration-300 md:translate-x-0 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           }`}
         >
@@ -892,7 +892,7 @@ export default function AdminPage() {
 
         {sidebarOpen && <div className="fixed inset-0 bg-black/40 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
-        <main className="flex-1 md:ml-0 p-4 sm:p-6 lg:p-7">
+        <main className="flex-1 p-4 sm:p-6 lg:p-7 md:ml-64">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-4 sm:px-5 py-4 mb-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
