@@ -255,9 +255,11 @@ type UsersTableProps = {
   selectedIds?: string[];
   onToggle?: (id: string) => void;
   onToggleAll?: (checked: boolean, ids: string[]) => void;
+  onEdit?: (user: ManagedUser) => void;
+  onDelete?: (user: ManagedUser) => void;
 };
 
-function UsersTable({ rows, isLoading, selectable = false, selectedIds = [], onToggle, onToggleAll }: UsersTableProps) {
+function UsersTable({ rows, isLoading, selectable = false, selectedIds = [], onToggle, onToggleAll, onEdit, onDelete }: UsersTableProps) {
   const rowIds = rows.map((row) => row.id);
   const selectedCount = rowIds.filter((id) => selectedIds.includes(id)).length;
   const allSelected = rows.length > 0 && selectedCount === rows.length;
@@ -283,18 +285,19 @@ function UsersTable({ rows, isLoading, selectable = false, selectedIds = [], onT
               <th className="text-left px-4 py-3 font-semibold text-slate-600">Email</th>
               <th className="text-left px-4 py-3 font-semibold text-slate-600">Joined Date</th>
               <th className="text-left px-4 py-3 font-semibold text-slate-600">Source</th>
+              {(onEdit || onDelete) && <th className="text-left px-4 py-3 font-semibold text-slate-600">Actions</th>}
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td className="px-4 py-10 text-slate-500" colSpan={selectable ? 6 : 5}>
+                <td className="px-4 py-10 text-slate-500" colSpan={(selectable ? 6 : 5) + (onEdit || onDelete ? 1 : 0)}>
                   Loading users...
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td className="px-4 py-10 text-slate-500" colSpan={selectable ? 6 : 5}>
+                <td className="px-4 py-10 text-slate-500" colSpan={(selectable ? 6 : 5) + (onEdit || onDelete ? 1 : 0)}>
                   No users available.
                 </td>
               </tr>
@@ -328,6 +331,7 @@ function UsersTable({ rows, isLoading, selectable = false, selectedIds = [], onT
                       {user.source}
                     </span>
                   </td>
+                  {(onEdit || onDelete) && <td className="px-4 py-3"><div className="flex gap-2"><button type="button" onClick={() => onEdit?.(user)} className="rounded-md border border-slate-300 px-2 py-1 text-xs font-medium hover:bg-slate-50">Edit</button><button type="button" onClick={() => onDelete?.(user)} className="rounded-md border border-rose-200 px-2 py-1 text-xs font-medium text-rose-700 hover:bg-rose-50">Delete</button></div></td>}
                 </tr>
               ))
             )}
@@ -362,6 +366,8 @@ export default function AdminPage() {
   const [newUserMobile, setNewUserMobile] = useState("");
   const [newUserEmail, setNewUserEmail] = useState("");
   const [userNotice, setUserNotice] = useState<NoticeState>(null);
+  const [deletedUserIds, setDeletedUserIds] = useState<string[]>([]);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
 
   const [emailSubject, setEmailSubject] = useState("Startup funding update from EazyGrow");
   const [emailBody, setEmailBody] = useState(
@@ -647,11 +653,33 @@ export default function AdminPage() {
 
   const filteredUsers = useMemo(() => {
     const term = userSearchText.trim().toLowerCase();
-    if (!term) return allUsers;
-    return allUsers.filter((user) =>
+    const visibleUsers = allUsers.filter((user) => !deletedUserIds.includes(user.id));
+    if (!term) return visibleUsers;
+    return visibleUsers.filter((user) =>
       [user.name, user.mobile, user.email, user.joinedDate, user.source].join(" ").toLowerCase().includes(term)
     );
-  }, [allUsers, userSearchText]);
+  }, [allUsers, userSearchText, deletedUserIds]);
+
+  const handleDeleteUser = (user: ManagedUser) => {
+    if (!window.confirm(`Delete ${user.name || user.email || "this user"}?`)) return;
+    setDeletedUserIds((current) => [...new Set([...current, user.id])]);
+    setSelectedUserIds((current) => current.filter((id) => id !== user.id));
+    setUserNotice({ type: "success", message: "User hidden from the admin list." });
+  };
+
+  const handleEditUser = (user: ManagedUser) => {
+    const name = window.prompt("Name", user.name);
+    if (name === null) return;
+    const email = window.prompt("Email", user.email);
+    if (email === null) return;
+    const mobile = window.prompt("Mobile", user.mobile);
+    if (mobile === null) return;
+    setManualUsers((current) => [...current.filter((item) => item.id !== user.id), { ...user, name: name.trim(), email: email.trim(), mobile: mobile.trim(), source: user.source === "lead" ? "manual" : user.source }]);
+    setUserNotice({ type: "success", message: "User details updated." });
+  };
+
+  const toggleUserSelection = (id: string) => setSelectedUserIds((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const toggleAllUsers = (checked: boolean, ids: string[]) => setSelectedUserIds(checked ? ids : []);
 
   const usersKpis = useMemo(() => {
     const monthStart = new Date();
@@ -1215,7 +1243,7 @@ export default function AdminPage() {
                 )}
               </div>
 
-              <UsersTable rows={filteredUsers} isLoading={isLoading} />
+              <UsersTable rows={filteredUsers} isLoading={isLoading} selectable selectedIds={selectedUserIds} onToggle={toggleUserSelection} onToggleAll={toggleAllUsers} onEdit={handleEditUser} onDelete={handleDeleteUser} />
             </div>
           )}
 
